@@ -1,32 +1,41 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+  <div id="system_main_container"> 
+    <Loading v-show="$systemFunctions.statusDataLoaded == 0" />
+    <Loading v-if="statusSiteLoaded == 0" />
+    <LoadingFailed v-else-if="statusSiteLoaded == -1" />
+    <ThemeSingle v-else-if="statusSiteLoaded == 1 && !($systemFunctions.user.id > 0)" />
   </div>
 </template>
+<script>
+//import ThemeDefault from "./components/themes/ThemeDefault.vue";
+import ThemeSingle from "@/components/themes/ThemeSingle.vue";
+import Loading from "@/components/busy-states/Loading.vue";
+import LoadingFailed from "@/components/busy-states/LoadingFailed.vue";
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+export default {
+  components: {
+    Loading,
+    LoadingFailed,
+    // ThemeDefault,
+    ThemeSingle,
+  },
+  data() {
+    return {
+      statusSiteLoaded: 0, //Loading=0,success=0,failed=-1  only this page
+    };
+  },
+  mounted() {
+    this.$systemFunctions.setPageTitle(this.$systemFunctions.getLabel("label_site_title"));   
+    this.init(); 
+  },
+  methods: {
+    init()
+    {
+      this.statusSiteLoaded =1;
+      this.$router.push("/login");
+      
+      //this.$systemFunctions.statusTaskLoaded=-3;
+    }
+  }
 }
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+</script>
