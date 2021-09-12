@@ -3,6 +3,20 @@
  */
 $(document).ready(function ()
 {
+    $(document).on("click", ".eye_password", function(event)
+    {
+        var input=$(this).siblings('input');
+        if(input.attr('type')=='password')
+        {
+            $(this).find('i').removeClass('icon-eye').addClass('icon-eye-off');
+            input.attr('type','text');
+        }
+        else
+        {
+            $(this).find('i').removeClass('icon-eye-off').addClass('icon-eye');
+            input.attr('type','password');
+        }
+    });
     /*number format input box*/
     $(document).on("input", ".float_positive", function(event)
     {

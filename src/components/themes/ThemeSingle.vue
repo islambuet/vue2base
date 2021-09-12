@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import LoadingAccessDeny from "../busy-states/LoadingAccessDeny.vue";
-import SiteOffline from "../busy-states/SiteOffline.vue";
+import LoadingAccessDeny from "@/components/busy-states/LoadingAccessDeny.vue";
+import SiteOffline from "@/components/busy-states/SiteOffline.vue";
 
 export default {
   components: {
