@@ -26,17 +26,46 @@ export default {
     };
   },
   mounted() {
+    //this.$axios.defaults.baseURL = 'http://127.0.0.1:8085/api';    
+    //this.$axios.defaults.baseURL = this.$systemFunctions.baseUrl+'../apivue2base/public/api/';//enable for final build
+    this.$axios.defaults.baseURL = 'http://127.0.0.1/base/apivue2base/public/api/';
+    this.$axios.defaults.headers.common['language'] = this.$systemFunctions.language;
+    this.$axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.$systemFunctions.user.authToken;
+    //before axios call
+    let $this=this;
+    this.$axios.interceptors.request.use(function (config) {  
+        $this.$toast.clear();
+        $this.$systemFunctions.validationErrors='';
+        return config;
+      }, function (error) {              
+        return Promise.reject(error);
+      });
+    this.$systemFunctions.setPageTitle(this.$systemFunctions.getLabel("label_site_title"));
+    this.init();
+
+
     this.$systemFunctions.setPageTitle(this.$systemFunctions.getLabel("label_site_title"));   
     this.init(); 
   },
   methods: {
     init()
     {
-      this.statusSiteLoaded =1;
-      //this.$systemFunctions.user.id=1;
-      //this.$router.push("/login");
-      
-      //this.$systemFunctions.statusTaskLoaded=-3;
+      this.$axios.all([      
+          this.$axios.get('/user/initialize'),  
+                 
+        ]).then(this.$axios.spread((resUser) => 
+        { 
+          if(resUser.data.user){               
+              this.$systemFunctions.setUser(resUser.data.user); 
+            }else{
+              if(this.$router.history.current.path!='/login'){
+                this.$router.push("/login");
+              }
+            }   
+            this.statusSiteLoaded=1;                  
+        })).catch(error => {                  
+          this.statusSiteLoaded=-1;
+      });
     }
   }
 }

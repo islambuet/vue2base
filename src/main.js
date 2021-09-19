@@ -8,6 +8,21 @@ Vue.prototype.$systemFunctions = systemFunctions;
 import systemHtmlElementsAction from '@/assets/SystemHtmlElementsAction'
 Vue.prototype.$systemHtmlElementsAction = systemHtmlElementsAction;
 
+//axios
+import axios from 'axios';
+Vue.prototype.$axios = axios;
+
+// For Alerts
+import Toast from "vue-toastification";
+import "vue-toastification/dist/index.css";
+const options = {
+  timeout: false,
+  position: "top-center",
+  transition: "Vue-Toastification__fade",
+  maxToasts: 1,
+};
+Vue.use(Toast, options);
+
 Vue.config.productionTip = false
 
 new Vue({

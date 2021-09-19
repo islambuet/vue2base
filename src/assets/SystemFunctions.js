@@ -31,11 +31,11 @@ function initialData() {
         language: language,
         labels: labels,
         user: {
-        authToken: localStorage.getItem(localStorageAuthTokenStr) ? localStorage.getItem(localStorageAuthTokenStr) : '',
-        id: 0,
-        name: language == 'en' ? 'Guest' : 'অতিথি',
-        info:{},
-        tasks: []
+            authToken: localStorage.getItem(localStorageAuthTokenStr) ? localStorage.getItem(localStorageAuthTokenStr) : '',
+            id: 0,
+            name: language == 'en' ? 'Guest' : 'অতিথি',
+            info:{},
+            tasks: []
         },    
         baseUrl: process.env.BASE_URL,
         statusTaskLoaded: 0,    //Loading=0,success=1,failed=-1,acceesdenied=-2, site_off_line = -3  for all page
@@ -69,6 +69,64 @@ var systemFunctions = new Vue({
         setPageTitle(title) {
             document.title = title;
         },  
+        showSuccessMessage(msg) {
+            this.$toast.success(msg, {timeout: 2000 });
+        },
+        showResponseFailure() {
+            this.$toast.error(this.$systemFunctions.getLabel('msg_loading_failed_message'));
+        },
+        showResponseError(data) {
+            //console.log(error);
+            if (data.error == 'ACCESS_DENIED') {                
+                this.statusTaskLoaded = -2;
+            }
+            else if (data.error == 'API_OFFLINE') {                
+                this.statusTaskLoaded = -3;
+            }
+            else if (data.error == 'USER_SESSION_EXPIRED') {                
+                localStorage.setItem(this.localStorageAuthTokenStr, '');
+                this.$axios.defaults.headers.common['Authorization'] = '';
+                this.user = this.getInitialUser();                
+                this.$routes.push("/login");
+                this.$toast.error(this.$systemFunctions.getLabel(data.errorMessage));
+            }
+            else if (data.error == 'VALIDATION_FAILED') {
+                if(typeof data.errorMessage=='string'){
+                    this.validationErrors = data.errorMessage;
+                }else if(typeof data.errorMessage=='object'){
+                    let messages='';
+                    for (let message in data.errorMessage) {
+                        messages+=data.errorMessage[message]+'<br>';                        
+                      }
+                    this.validationErrors = messages;                    
+                } else{
+                    console.log(data.errorMessage);
+                }
+            }
+            else {
+                this.$toast.error(this.getLabel(data.errorMessage));
+            }
+            //           
+        },
+        setUser: function (data) {
+            // data == object {token_auth: 'value'}, ...
+            for (var item_key in data) {
+                this.user[item_key] = data[item_key];
+            }
+        },
+        logout() {
+            this.$axios.get('/user/logout')
+            .then(response => {                    
+            })
+            .catch(error => {
+            });
+            localStorage.setItem(this.localStorageAuthTokenStr, '');
+            this.$axios.defaults.headers.common['Authorization'] = '';
+            //var tempdata = initialData();
+            this.user = initialData().user;            
+            this.$routes.push("/login");
+            
+        },
     }
 });
 export default systemFunctions

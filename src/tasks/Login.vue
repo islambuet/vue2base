@@ -69,9 +69,7 @@ export default {
       }      
     },
     login() {
-      this.$systemFunctions.user.id=1;
-      //this.$router.push("/");
-      /*this.$systemFunctions.statusDataLoaded = 0;      
+      this.$systemFunctions.statusDataLoaded = 0;      
       let formData=new FormData(document.getElementById('formLogin'));
       this.$axios.post("user/login", formData)
         .then((res) => {
@@ -84,13 +82,15 @@ export default {
           }                    
         })
         .catch((error) => { 
+          console.log(error);
           this.$systemFunctions.statusDataLoaded = 1;
           if (error.response && error.response.data && error.response.data.error) {
-            this.$systemFunctions.showResponseError(error.response.data);            
+            this.$systemFunctions.showResponseError(error.response.data);
+            
           } else {            
             this.$systemFunctions.showResponseFailure();
           }
-        });*/
+        });
 
     },
   },
