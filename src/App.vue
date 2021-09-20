@@ -25,7 +25,7 @@ export default {
       statusSiteLoaded: 0, //Loading=0,success=0,failed=-1  only this page
     };
   },
-  mounted() {
+  created() {
     //this.$axios.defaults.baseURL = 'http://127.0.0.1:8085/api';    
     //this.$axios.defaults.baseURL = this.$systemFunctions.baseUrl+'../apivue2base/public/api/';//enable for final build
     this.$axios.defaults.baseURL = 'http://127.0.0.1/base/apivue2base/public/api/';
@@ -42,10 +42,6 @@ export default {
       });
     this.$systemFunctions.setPageTitle(this.$systemFunctions.getLabel("label_site_title"));
     this.init();
-
-
-    this.$systemFunctions.setPageTitle(this.$systemFunctions.getLabel("label_site_title"));   
-    this.init(); 
   },
   methods: {
     init()

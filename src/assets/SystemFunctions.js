@@ -29,6 +29,7 @@ function initialData() {
         localStorageAuthTokenStr:localStorageAuthTokenStr,
         localStorageLanguageStr:localStorageLanguageStr,
         language: language,
+        language_available:['en','bn'],
         labels: labels,
         user: {
             authToken: localStorage.getItem(localStorageAuthTokenStr) ? localStorage.getItem(localStorageAuthTokenStr) : '',
@@ -60,8 +61,20 @@ var systemFunctions = new Vue({
             localStorage.setItem(this.localStorageLanguageStr,language);  
             window.location.reload(); 
         },
-        addLanguages: function () {
+        loadLanguageFiles: function (language_files) { 
             
+            try {
+                for (var i = 0; i < language_files.length; i++) {
+                    var language = language_files[i].language;
+                    var filedata = require(`@/${language_files[i].file}`);                    
+                    for (var item in filedata.labels) {
+                        this.labels[item] = filedata.labels[item][language] ? filedata.labels[item][language] : item;
+                    }
+                }
+            }
+            catch (error) {
+                console.log(error);
+            }
         },
         getLabel(key) {        
             return this.labels[key] ? this.labels[key] : key;
