@@ -1,16 +1,18 @@
 <template>
     <div v-if="$systemFunctions.statusTaskLoaded==1">
         <List v-show="method=='list'"/>
+        <AddEdit v-show="method=='add' || method=='edit'"/>
     </div>
 </template>
 
 <script>
 import List from './List.vue'
+import AddEdit from './AddEdit.vue'
 // import Pagination from '@/components/Pagination.vue';
 // import ValidationError from '@/components/ValidationError.vue';
     export default {
         components: {
-            List
+            List,AddEdit
             // Pagination,
             // ValidationError,
         },
@@ -54,10 +56,33 @@ import List from './List.vue'
         },
         watch: {
             $route(to, from) {
-                //this.routing(to);                      
+                this.routing(to);                      
             }
         },
         methods: {
+            routing:function(route)
+            { 
+                this.getItems(this.pagination);//Load at least once
+                if(route.path=='/'+this.base_url)
+                {
+                    this.method='list';
+                }
+                else if(route.path=='/'+this.base_url+'/add')
+                {
+                    this.method='add';
+                    this.addItem();
+                }
+                else if(route.path.indexOf('/'+this.base_url+'/edit/')!=-1)
+                {
+                    this.method='edit';        
+                    //this.addEdit(route.params['item_id']);        
+                }
+                else if(route.path.indexOf('/'+this.base_url+'/role/')!=-1)
+                {
+                    this.method='role';        
+                    //this.role(route.params['item_id']);        
+                }
+            },
             init(){
                 this.$systemFunctions.statusTaskLoaded=0;
                 this.$systemFunctions.statusDataLoaded=0;                
@@ -70,7 +95,7 @@ import List from './List.vue'
                         this.modules_tasks=res.data.modules_tasks;
                         this.setColumns();
                         this.$systemFunctions.statusTaskLoaded=1;
-                        this.reloadItems(this.pagination);
+                        this.routing(this.$route);                        
                     }
                     this.$systemFunctions.statusDataLoaded = 1;
                 }).catch(error => {                      
@@ -120,11 +145,18 @@ import List from './List.vue'
                     });
                 }                
             },            
-            // addItem(){
-            //     this.$systemFunctions.validationErrors='';
-            //     this.item={};
-            //     Object.assign(this.item, this.itemDefault);                
-            // },
+            addItem(){
+                this.$systemFunctions.validationErrors='';
+                if(!(this.permissions.action_1))
+                {
+                    this.$systemFunctions.statusTaskLoaded=-2;
+                }
+                else
+                { 
+                    this.item={};
+                    Object.assign(this.item, this.itemDefault);           
+                }
+            },
             // editItem(item){
             //     this.$systemFunctions.validationErrors='';
             //     this.item={};
