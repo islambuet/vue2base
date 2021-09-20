@@ -9,6 +9,13 @@
 
                 <button type="button" v-if="$parent.permissions.action_5" class="mr-2 mb-2 btn btn-sm bg-gradient-primary" onclick="window.print();"><i class="feather icon-printer"></i> {{$systemFunctions.getLabel('action_5')}}</button>
                 <button type="button" v-if="$parent.permissions.action_6" class="mr-2 mb-2 btn btn-sm bg-gradient-primary" onclick="window.print();"><i class="feather icon-download"></i> {{$systemFunctions.getLabel('action_6')}}</button>
+
+                <button type="button" v-if="$parent.permissions.action_8" class="mr-2 mb-2 btn btn-sm" :class="[show_column_controls?'bg-gradient-success':'bg-gradient-primary']" @click="show_column_controls = !show_column_controls"><i class="feather icon-command"></i> {{$systemFunctions.getLabel('action_8')}}</button>
+
+                <button type="button" v-if="$parent.permissions.action_0" class="mr-2 mb-2 btn btn-sm bg-gradient-primary" @click="$parent.init"><i class="feather icon-rotate-cw"></i> {{$systemFunctions.getLabel('button_refresh')}}</button>
+
+                
+
                 <!-- <button type="button" v-if="$parent.permissions.action_0" class="mr-2 mb-2 btn btn-sm bg-gradient-primary" onclick="window.print();"><i class="feather icon-download"></i> {{$systemFunctions.getLabel('action_refresh')}}</button> -->
 
 
@@ -22,32 +29,46 @@
                 <b-button class="mr-2 mb-2" variant="success" v-if="$parent.permissions.action0" @click="$parent.init" >{{$systemFunctions.getLabel('button_refresh')}}</b-button> -->
             </div>
         </div>    
+        <div class="card d-print-none mb-2" v-if="show_column_controls">
+            <div class="card-body">
+                <ColumnControl :controller="'Area'" :method="'list'" :columns="$parent.columns"/>            
+            </div>
+        </div>
         <div class="card mb-2">
             <div class="card-header d-print-none">
                 {{$systemFunctions.getLabel('label_task')}}
             </div>
             <div class="card-body" style='overflow-x:auto'>
-                <table class="table table-bordered">
+                <table class="table table-bordered has-sticky-column">
                     <thead class="table-active">
-                        <!-- <tr>
+                        <tr>
                             <th class="cell-nowrap d-print-none">{{$systemFunctions.getLabel('label_action')}}</th>
-                            <th v-for="(column,i) in columns.csv" :key="'columnTable'+i">{{$systemFunctions.getLabel(column.label)}}</th>                            
-                        </tr> -->
+                            <template v-for="(column,key) in $parent.columns.all">                                 
+                                <th v-if="!column.hidden" :key="'th_'+key">     
+                                    {{ column.label }}
+                                </th> 
+                            </template>  
+                            
+                        </tr>
+                        
                     </thead>
                     <tbody class="table-striped table-hover">
-                        <!-- <tr v-for="item in getFilteredItems" :key="item.id">
-                            <td class="col-2 d-print-none">
+                        <tr v-for="item in getFilteredItems" :key="'item_'+item.id">
+                            <td class="col-1 d-print-none">
                                 <button class="btn btn-sm bg-gradient-primary dropdown-toggle waves-effect waves-light" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{$systemFunctions.getLabel('label_action')}}</button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-                                    <a v-if="permissions.action_2" class="dropdown-item text-info btn-sm" href="javascript:void(0)" @click="editItem(item)" data-toggle="modal" data-target="#modalAddEdit"><i class="feather icon-edit"></i> {{$systemFunctions.getLabel('action_2')}}</a>
-                                    <a v-if="permissions.action_2" class="dropdown-item text-info btn-sm" href="javascript:void(0)" @click="assignTask(item)" data-toggle="modal" data-target="#modalAssignTask"><i class="feather icon-check-square"></i> {{$systemFunctions.getLabelTask('action_assign_Task')}}</a>                                    
+                                    <router-link v-if="$parent.permissions.action_2"  :to="'/'+$parent.base_url+'/details/'+item.id" class="dropdown-item text-info btn-sm" ><i class="feather icon-camera"></i> {{$systemFunctions.getLabel('action_details')}}</router-link>
+                                    <router-link v-if="$parent.permissions.action_2"  :to="'/'+$parent.base_url+'/edit/'+item.id" class="dropdown-item text-info btn-sm" ><i class="feather icon-edit"></i> {{$systemFunctions.getLabel('action_2')}}</router-link>
+                                    <router-link v-if="$parent.permissions.action_2"  :to="'/'+$parent.base_url+'/role/'+item.id" class="dropdown-item text-info btn-sm" ><i class="feather icon-check-square"></i> {{$systemFunctions.getLabel('action_assign_Task')}}</router-link>
                                 </div>
                             </td>
-                            <td class="col-1">{{ item.id }}</td>
-                            <td class="col-7">{{ item.name }}</td>
-                            <td class="col-1">{{ item.ordering }}</td>
-                            <td class="col-2">{{ item.status }}</td>
-                        </tr> -->
+                            <template v-for="(column,key) in $parent.columns.all">                         
+                                <td class="col-1" v-if="!column.hidden" :key="'td_'+key">                        
+                                    {{ item[key] }}
+                                </td>     
+                            </template>     
+                            
+                        </tr>
                     </tbody>
                 </table>
                 <!-- <Pagination :items = "items" :onChangePageOption="getItems" :pagination="pagination"  /> -->
@@ -57,131 +78,46 @@
 </template>
 
 <script>
+import ColumnControl from '@/components/ColumnControl.vue'
 // import Pagination from '@/components/Pagination.vue';
 // import ValidationError from '@/components/ValidationError.vue';
     export default {
         components: {
             // Pagination,
             // ValidationError,
+            ColumnControl
         },
-
-        data (){
-            return {                
+        data:function(){
+            return{      
+                show_fitler_options:false,
+                show_column_controls:false
             }
         },
-        mounted (){
-                   
-        },
-        
         methods: {
-            init(){
-                
-
-            },
-            // setColumnCsv() {
-            //     this.columns.csv=[];                
-            //     this.columns.csv.push({
-            //         label: this.$systemFunctions.getLabel('label_id'),
-            //         key: 'id'
-            //     });
-            //     this.columns.csv.push({
-            //         label: this.$systemFunctions.getLabel('label_name'),
-            //         key: 'name'
-            //     });
-            //     this.columns.csv.push({
-            //         label: this.$systemFunctions.getLabel('label_ordering'),
-            //         key: 'ordering'
-            //     });
-            //     this.columns.csv.push({
-            //         label: this.$systemFunctions.getLabel('label_status'),
-            //         key: 'status'
-            //     });
-            // },
-            // getItems(pagination){
-            //     this.$systemFunctions.statusDataLoaded=0;
-            //     this.$axios.get('/users-groups/get-items?page='+ pagination.current_page+'&perPage='+ pagination.per_page)
-            //     .then(res => {
-            //         this.$systemFunctions.statusDataLoaded = 1;
-            //         if(res.data.error==''){
-            //             this.items=res.data.items;                                                
-            //         }
-            //     }).catch(error => {                      
-            //         this.$systemFunctions.statusDataLoaded = 1;
-            //         if (error.response && error.response.data && error.response.data.error) {
-            //             this.$systemFunctions.showResponseError(error.response.data);            
-            //         } else {            
-            //             this.$systemFunctions.showResponseFailure();
-            //         }                              
-            //     });
-            // },            
-            // addItem(){
-            //     this.$systemFunctions.validationErrors='';
-            //     this.item={};
-            //     Object.assign(this.item, this.itemDefault);                
-            // },
-            // editItem(item){
-            //     this.$systemFunctions.validationErrors='';
-            //     this.item={};
-            //     Object.assign(this.item, item);                            
-            // },
-            // assignTask(item){
-            //     this.$systemFunctions.validationErrors='';
-            //     this.refreshRole=false;
-            //     let $this=this;
-            //     //settimeout for rerender the div
-            //     setTimeout(() => {
-            //         $this.refreshRole=true;
-            //         $this.item={};
-            //         Object.assign($this.item, item);                
-            //      }, 1);
-                
-            // },            
-            // saveItem(){
-                
-            //     this.$systemFunctions.statusDataLoaded=0;
-            //     this.$axios.post('/users-groups/save-item',new FormData(document.getElementById('formSave')))
-            //     .then(res => {
-            //         this.$systemFunctions.statusDataLoaded = 1;
-            //         if(res.data.error==''){
-            //             this.$systemFunctions.showSuccessMessage(this.$systemFunctions.getLabel('msg_success_saved'));
-            //             $('#modalAddEdit').modal('hide');
-            //             this.getItems(this.pagination);
-            //         }
-            //     }).catch(error => {                      
-            //         this.$systemFunctions.statusDataLoaded = 1;
-            //         if (error.response && error.response.data && error.response.data.error) {
-            //             this.$systemFunctions.showResponseError(error.response.data);            
-            //         } else {            
-            //             this.$systemFunctions.showResponseFailure();
-            //         }                              
-            //     });
-            // },
-            // saveRole(form_id){
-            //     this.$systemFunctions.statusDataLoaded=0;
-            //     this.$axios.post('/users-groups/save-role/'+this.item.id,new FormData(document.getElementById(form_id)))
-            //     .then(res => {
-            //         this.$systemFunctions.statusDataLoaded = 1;
-            //         if(res.data.error==''){                        
-            //             this.$systemFunctions.showSuccessMessage(this.$systemFunctions.getLabel('msg_success_saved'));
-            //             $('#modalAssignTask').modal('hide');
-            //             this.getItems(this.pagination);
-            //         }
-            //     }).catch(error => {                      
-            //         this.$systemFunctions.statusDataLoaded = 1;
-            //         if (error.response && error.response.data && error.response.data.error) {
-            //             this.$systemFunctions.showResponseError(error.response.data);            
-            //         } else {            
-            //             this.$systemFunctions.showResponseFailure();
-            //         }                              
-            //     });
-
-            // },
             
+        },
+        computed:{   
+            getFilteredItems:function(){   
+                
+                if(this.$parent.itemsLoaded){
+                    let items=this.$parent.items;
+                    return items.data;
+                    //console.log(items.data);
+                    //return items.data;
+                    // return items.data.filter((item)=>{
+                    // // if(this.searchString){
+                    // //     if(item['name'].toLowerCase().indexOf(this.searchString.toLowerCase())==-1){
+                    // //         return false;
+                    // //     } 
+                    // // }
+                    // return true;
+                    // });
+                }else{
+                    return [];
+                }
+                
+            }, 
         }
 
     }
 </script>
-
-<style  scoped>
-
-</style>

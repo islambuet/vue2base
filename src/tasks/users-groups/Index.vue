@@ -22,7 +22,11 @@ import List from './List.vue'
                 permissions:{},
                 itemDefault: {},
                 item: {},
+                items: {},
+                itemsLoaded:false,
                 modules_tasks:{},
+                columns:{all:{},hidden:[]},
+                pagination: {current_page: 1,per_page_options: [1,2,10,20,500,1000],per_page:1,show_all_items:true},
                 // module_task_max_action:0,
 
                 /*refreshRole:false,
@@ -57,15 +61,17 @@ import List from './List.vue'
             init(){
                 this.$systemFunctions.statusTaskLoaded=0;
                 this.$systemFunctions.statusDataLoaded=0;
-                this.$axios.get('/users-groups/initialize')
+                this.itemsLoaded=false;
+                this.$axios.get('/'+this.base_url+'/initialize')
                 .then(res=>{                    
                     if(res.data.error==''){
                         // this.setColumnCsv();                        
                         this.permissions=res.data.permissions;
                         this.itemDefault=res.data.itemDefault;
                         this.modules_tasks=res.data.modules_tasks;
+                        this.setColumns();
                         this.$systemFunctions.statusTaskLoaded=1;
-                        // this.getItems(this.pagination);
+                        this.getItems(this.pagination);
                     }
                     this.$systemFunctions.statusDataLoaded = 1;
                 }).catch(error => {                      
@@ -77,42 +83,41 @@ import List from './List.vue'
                     }                              
                 });
             },
-            // setColumnCsv() {
-            //     this.columns.csv=[];                
-            //     this.columns.csv.push({
-            //         label: this.$systemFunctions.getLabel('label_id'),
-            //         key: 'id'
-            //     });
-            //     this.columns.csv.push({
-            //         label: this.$systemFunctions.getLabel('label_name'),
-            //         key: 'name'
-            //     });
-            //     this.columns.csv.push({
-            //         label: this.$systemFunctions.getLabel('label_ordering'),
-            //         key: 'ordering'
-            //     });
-            //     this.columns.csv.push({
-            //         label: this.$systemFunctions.getLabel('label_status'),
-            //         key: 'status'
-            //     });
-            // },
-            // getItems(pagination){
-            //     this.$systemFunctions.statusDataLoaded=0;
-            //     this.$axios.get('/users-groups/get-items?page='+ pagination.current_page+'&perPage='+ pagination.per_page)
-            //     .then(res => {
-            //         this.$systemFunctions.statusDataLoaded = 1;
-            //         if(res.data.error==''){
-            //             this.items=res.data.items;                                                
-            //         }
-            //     }).catch(error => {                      
-            //         this.$systemFunctions.statusDataLoaded = 1;
-            //         if (error.response && error.response.data && error.response.data.error) {
-            //             this.$systemFunctions.showResponseError(error.response.data);            
-            //         } else {            
-            //             this.$systemFunctions.showResponseFailure();
-            //         }                              
-            //     });
-            // },            
+            setColumns(){
+                //this.columns.hidden=['id','name'];
+                this.columns.all={};
+                let key='id';
+                this.columns.all[key]={label: this.$systemFunctions.getLabel('label_id'),hidden:this.columns.hidden.indexOf(key)>=0?true:false,hideable:false};
+                key='name';
+                this.columns.all[key]={label: this.$systemFunctions.getLabel('label_name'),hidden:this.columns.hidden.indexOf(key)>=0?true:false,hideable:true};
+                key='ordering';
+                this.columns.all[key]={label: this.$systemFunctions.getLabel('label_ordering'),hidden:this.columns.hidden.indexOf(key)>=0?true:false,hideable:true};
+                key='status';
+                this.columns.all[key]={label: this.$systemFunctions.getLabel('label_status'),hidden:this.columns.hidden.indexOf(key)>=0?true:false,hideable:true};
+
+            },            
+            getItems(pagination){
+                if(!this.itemsLoaded)
+                {
+                    this.$systemFunctions.statusDataLoaded=0;
+                    this.$axios.get('/'+this.base_url+'/get-items?page='+ pagination.current_page+'&perPage='+ pagination.per_page)
+                    .then(res => {
+                        this.$systemFunctions.statusDataLoaded = 1;
+                        if(res.data.error==''){
+                            this.items=res.data.items;                                                
+                        }
+                        this.itemsLoaded=true;
+                    }).catch(error => {                      
+                        this.$systemFunctions.statusDataLoaded = 1;
+                        if (error.response && error.response.data && error.response.data.error) {
+                            this.$systemFunctions.showResponseError(error.response.data);            
+                        } else {            
+                            this.$systemFunctions.showResponseFailure();
+                        }                              
+                    });
+                }
+                
+            },            
             // addItem(){
             //     this.$systemFunctions.validationErrors='';
             //     this.item={};
