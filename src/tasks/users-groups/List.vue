@@ -71,7 +71,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <!-- <Pagination :items = "items" :onChangePageOption="getItems" :pagination="pagination"  /> -->
+                <Pagination :items = "$parent.items" :onChangePageOption="$parent.reloadItems" :pagination="$parent.pagination"/>
             </div> 
         </div>    
     </div>
@@ -79,11 +79,11 @@
 
 <script>
 import ColumnControl from '@/components/ColumnControl.vue'
-// import Pagination from '@/components/Pagination.vue';
+import Pagination from '@/components/Pagination.vue';
 // import ValidationError from '@/components/ValidationError.vue';
     export default {
         components: {
-            // Pagination,
+            Pagination,
             // ValidationError,
             ColumnControl
         },

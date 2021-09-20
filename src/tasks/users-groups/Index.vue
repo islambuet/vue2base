@@ -26,7 +26,7 @@ import List from './List.vue'
                 itemsLoaded:false,
                 modules_tasks:{},
                 columns:{all:{},hidden:[]},
-                pagination: {current_page: 1,per_page_options: [1,2,10,20,500,1000],per_page:1,show_all_items:true},
+                pagination: {current_page: 1,per_page_options: [1,2,3,4,5,10,20,500,1000],per_page:3,show_all_items:true},
                 // module_task_max_action:0,
 
                 /*refreshRole:false,
@@ -60,8 +60,7 @@ import List from './List.vue'
         methods: {
             init(){
                 this.$systemFunctions.statusTaskLoaded=0;
-                this.$systemFunctions.statusDataLoaded=0;
-                this.itemsLoaded=false;
+                this.$systemFunctions.statusDataLoaded=0;                
                 this.$axios.get('/'+this.base_url+'/initialize')
                 .then(res=>{                    
                     if(res.data.error==''){
@@ -71,7 +70,7 @@ import List from './List.vue'
                         this.modules_tasks=res.data.modules_tasks;
                         this.setColumns();
                         this.$systemFunctions.statusTaskLoaded=1;
-                        this.getItems(this.pagination);
+                        this.reloadItems(this.pagination);
                     }
                     this.$systemFunctions.statusDataLoaded = 1;
                 }).catch(error => {                      
@@ -95,8 +94,12 @@ import List from './List.vue'
                 key='status';
                 this.columns.all[key]={label: this.$systemFunctions.getLabel('label_status'),hidden:this.columns.hidden.indexOf(key)>=0?true:false,hideable:true};
 
-            },            
-            getItems(pagination){
+            },  
+            reloadItems(pagination){
+                this.itemsLoaded=false;
+                this.getItems(pagination);
+            },       
+            getItems(pagination){                
                 if(!this.itemsLoaded)
                 {
                     this.$systemFunctions.statusDataLoaded=0;
@@ -115,8 +118,7 @@ import List from './List.vue'
                             this.$systemFunctions.showResponseFailure();
                         }                              
                     });
-                }
-                
+                }                
             },            
             // addItem(){
             //     this.$systemFunctions.validationErrors='';
