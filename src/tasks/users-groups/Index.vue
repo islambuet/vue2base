@@ -25,6 +25,7 @@ import AddEdit from './AddEdit.vue'
                 itemsLoaded:false,
                 modules_tasks:{},
                 columns:{all:{},hidden:[]},
+                hidden_columns:[],
                 pagination: {current_page: 1,per_page_options: [1,2,3,4,5,10,20,500,1000],per_page:3,show_all_items:true},
                 // module_task_max_action:0,
 
@@ -90,6 +91,7 @@ import AddEdit from './AddEdit.vue'
                         this.permissions=res.data.permissions;
                         this.itemDefault=res.data.itemDefault;
                         this.modules_tasks=res.data.modules_tasks;
+                        this.columns.hidden=[];//from response
                         this.setColumns();
                         this.$systemFunctions.statusTaskLoaded=1;
                         this.routing(this.$route);                        
@@ -105,18 +107,33 @@ import AddEdit from './AddEdit.vue'
                 });
             },
             setColumns(){
-                //this.columns.hidden=['id','name'];
                 this.columns.all={};
+                //this.columns.hidden=['id','name'];
+                
                 let key='id';
-                this.columns.all[key]={label: this.$systemFunctions.getLabel('label_id'),hidden:this.columns.hidden.indexOf(key)>=0?true:false,hideable:false};
+                this.columns.all[key]={label: this.$systemFunctions.getLabel('label_id'),hideable:false};
                 key='name';
-                this.columns.all[key]={label: this.$systemFunctions.getLabel('label_name'),hidden:this.columns.hidden.indexOf(key)>=0?true:false,hideable:true};
+                this.columns.all[key]={label: this.$systemFunctions.getLabel('label_name'),hideable:true};
                 key='ordering';
-                this.columns.all[key]={label: this.$systemFunctions.getLabel('label_ordering'),hidden:this.columns.hidden.indexOf(key)>=0?true:false,hideable:true};
+                this.columns.all[key]={label: this.$systemFunctions.getLabel('label_ordering'),hideable:true};
                 key='status';
-                this.columns.all[key]={label: this.$systemFunctions.getLabel('label_status'),hidden:this.columns.hidden.indexOf(key)>=0?true:false,hideable:true};
+                this.columns.all[key]={label: this.$systemFunctions.getLabel('label_status'),hideable:true};
 
             },  
+            // setColumns(){
+            //     console.log("setColmns called");
+            //     //this.columns.hidden=['id','name'];
+            //     this.columns.all={};
+            //     let key='id';
+            //     this.columns.all[key]={label: this.$systemFunctions.getLabel('label_id'),hidden:this.columns.hidden.indexOf(key)>=0?true:false,hideable:false};
+            //     key='name';
+            //     this.columns.all[key]={label: this.$systemFunctions.getLabel('label_name'),hidden:this.columns.hidden.indexOf(key)>=0?true:false,hideable:true};
+            //     key='ordering';
+            //     this.columns.all[key]={label: this.$systemFunctions.getLabel('label_ordering'),hidden:this.columns.hidden.indexOf(key)>=0?true:false,hideable:true};
+            //     key='status';
+            //     this.columns.all[key]={label: this.$systemFunctions.getLabel('label_status'),hidden:this.columns.hidden.indexOf(key)>=0?true:false,hideable:true};
+
+            // },  
             reloadItems(pagination){
                 this.itemsLoaded=false;
                 this.getItems(pagination);

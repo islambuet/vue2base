@@ -1,37 +1,28 @@
 <template>
-    <div>
-        <form :id="'form_column_control'">
-            <!-- <input type="hidden" name="controller" :value="controller">
-            <input type="hidden" name="method" :value="method"> -->
-            
+    <div class="card d-print-none mb-2">
+        <div class="card-body">            
             <div class="row">
                 <template v-for="(column, key) in columns.all">
-                    <div class="col-sm-6 col-md-3" :key="'cc_'+key" v-if="column.hideable">                    
-                        <!-- <label><input type="checkbox" :value="key" name="hidden_columns[]" :checked="column.hidden" @change="toggle_control_columns($event,column)"> {{column.label}}</label> -->
-                        <label><input type="checkbox" :value="key" name="hidden_columns[]" v-model="column.hidden" @change="toggle_control_columns($event,column)"> {{column.label}}</label>
+                    <div class="col-sm-6 col-md-3" :key="'cc_'+key" v-if="column.hideable">                                                
+                        <label><input type="checkbox" :value="key" :checked="columns.hidden.indexOf(key)>=0?false:true" @change="toggleControlColumns($event)" > {{column.label}}</label>
                     </div>
                 </template>
             </div>
-              <div class="text-center" v-if="allow_save">
-                  <button type="button" class="btn btn-sm bg-gradient-primary" onclick="window.print();"><i class="feather icon-save"></i> {{$systemFunctions.getLabel('button_save_column_controls')}}</button>
-              </div>
-        </form>
+            <div class="text-center" v-if="allow_save">
+                <button type="button" class="btn btn-sm bg-gradient-primary" onclick="window.print();"><i class="feather icon-save"></i> {{$systemFunctions.getLabel('button_save_column_controls')}}</button>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
 export default { 
-    name: "ColumnControl",
-    data(){
-        return {
-            checked:true,
-        }
-    },
+    name: "ColumnControl",    
     props: {
         columns: {
             type: Object,
             required: true
-        },
+        },        
         allow_save:{
             type: Boolean,
             default:true
@@ -44,35 +35,21 @@ export default {
         //     type: String,
         //     required: true
         // },
-        // control_columns: {
-        //     type: Array,
-        //     required: true
-        // },
-        // hidden_columns: {
-        //     type: Array,
-        //     required: true
-        // },
-        // on_change_control: {
-        //     type: Function,
-        //     default: ()=> (console.log('default on change called'))            
-        // },
     }, 
     methods:{
-        toggle_control_columns:function (event,item)
+        toggleControlColumns:function (event)
         {
-            console.log(this.columns);
-            // setTimeout(() => {
-            //     if(!item.selected)
-            //     {   
-            //         this.hidden_columns.splice(this.hidden_columns.indexOf(item.value), 1);
-            //     }
-            //     else
-            //     {
-            //         this.hidden_columns.push(item.value);
-            //     }
-            //     this.on_change_control();            
-            // }, 0);
-        },
+            let key=event.srcElement.value;            
+            if(event.srcElement.checked)
+            { 
+                //this.columns.hidden.splice(this.columns.hidden.indexOf(key), 1);                                  
+                this.columns.hidden=this.columns.hidden.filter(function(value) {return value !== key});
+            }else
+            {
+                this.columns.hidden.push(key);
+            } 
+            console.log(this.columns.hidden);            
+        },        
         save_hidden_columns:function()
         {
             this.$system_variables.status_data_loaded=0; 

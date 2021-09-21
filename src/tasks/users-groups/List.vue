@@ -29,11 +29,8 @@
                 <b-button class="mr-2 mb-2" variant="success" v-if="$parent.permissions.action0" @click="$parent.init" >{{$systemFunctions.getLabel('button_refresh')}}</b-button> -->
             </div>
         </div>    
-        <div class="card d-print-none mb-2" v-if="show_column_controls">
-            <div class="card-body">
-                <ColumnControl :controller="'Area'" :method="'list'" :columns="$parent.columns"/>            
-            </div>
-        </div>
+        <ColumnControl :controller="'Area'" :method="'list'" :columns="$parent.columns" v-if="show_column_controls"/> 
+        
         <div class="card d-print-none mb-2" v-if="$parent.permissions.action_2">
             <div class="card-body">
                 <div class="input-group input-group-sm">
@@ -58,7 +55,7 @@
                         <tr>
                             <th class="cell-nowrap d-print-none">{{$systemFunctions.getLabel('label_action')}}</th>
                             <template v-for="(column,key) in $parent.columns.all">                                 
-                                <th v-if="!column.hidden" :key="'th_'+key">     
+                                <th v-if="$parent.columns.hidden.indexOf(key)>=0?false:true" :key="'th_'+key">     
                                     {{ column.label }}
                                 </th> 
                             </template>  
@@ -77,7 +74,7 @@
                                 </div>
                             </td>
                             <template v-for="(column,key) in $parent.columns.all">                         
-                                <td class="col-1" v-if="!column.hidden" :key="'td_'+key">                        
+                                <td class="col-1" v-if="$parent.columns.hidden.indexOf(key)>=0?false:true" :key="'td_'+key">                        
                                     {{ item[key] }}
                                 </td>     
                             </template>     
