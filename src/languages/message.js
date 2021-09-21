@@ -65,6 +65,10 @@ export var labels = {
         en: 'Data/ content not found.',
         bn: 'তথ্য/ বিষয়বস্তু খুঁজে পাওয়া যায়নি।',
     },
+    msg_item_not_found: {
+        en: 'Item not found.',
+        bn: 'Item খুঁজে পাওয়া যায়নি।',
+    },
     // Deny or, No Access
     msg_loading_access_deny_header: {
         en: 'Access Denied',

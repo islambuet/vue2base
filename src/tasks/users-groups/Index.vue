@@ -1,20 +1,17 @@
 <template>
     <div v-if="$systemFunctions.statusTaskLoaded==1">
-        <List v-show="method=='list'"/>
-        <AddEdit v-show="method=='add' || method=='edit'"/>
+        <List/>
+        <AddEdit/>
     </div>
 </template>
 
 <script>
 import List from './List.vue'
 import AddEdit from './AddEdit.vue'
-// import Pagination from '@/components/Pagination.vue';
-// import ValidationError from '@/components/ValidationError.vue';
     export default {
         components: {
-            List,AddEdit
-            // Pagination,
-            // ValidationError,
+            List,
+            AddEdit            
         },
 
         data (){
@@ -22,9 +19,9 @@ import AddEdit from './AddEdit.vue'
                 base_url:'users-groups',
                 method:'list',        
                 permissions:{},
-                itemDefault: {},
+                itemDefault: {},                
                 item: {},
-                items: {},
+                items: {data:[]},
                 itemsLoaded:false,
                 modules_tasks:{},
                 columns:{all:{},hidden:[]},
@@ -75,7 +72,7 @@ import AddEdit from './AddEdit.vue'
                 else if(route.path.indexOf('/'+this.base_url+'/edit/')!=-1)
                 {
                     this.method='edit';        
-                    //this.addEdit(route.params['item_id']);        
+                    this.editItem(route.params['item_id']);        
                 }
                 else if(route.path.indexOf('/'+this.base_url+'/role/')!=-1)
                 {
@@ -157,11 +154,44 @@ import AddEdit from './AddEdit.vue'
                     Object.assign(this.item, this.itemDefault);           
                 }
             },
-            // editItem(item){
-            //     this.$systemFunctions.validationErrors='';
-            //     this.item={};
-            //     Object.assign(this.item, item);                            
-            // },
+            editItem(item_id){
+                this.$systemFunctions.validationErrors='';
+                if(!(this.permissions.action_2))
+                {
+                    this.$systemFunctions.statusTaskLoaded=-2;
+                }
+                else
+                { 
+                    this.item={};
+                    //local search
+                    let items=this.items.data;
+                    for(let i=0;i<items.length;i++){
+                        if(items[i].id==item_id){
+                            Object.assign(this.item, items[i]);
+                        }                        
+                    }                    
+                    //Live Search request
+                    if(!('id' in this.item)){
+                        console.log("here too2");
+                        this.$systemFunctions.statusDataLoaded=0;
+                        this.$axios.get('/'+this.base_url+'/get-item/'+ item_id)
+                        .then(res => {
+                            this.$systemFunctions.statusDataLoaded = 1;
+                            if(res.data.error==''){
+                                this.item={};
+                                this.item=res.data.item;                     
+                            }
+                        }).catch(error => {   
+                            this.$systemFunctions.statusDataLoaded = 1;
+                            if (error.response && error.response.data && error.response.data.error) {
+                                this.$systemFunctions.showResponseError(error.response.data);            
+                            } else {            
+                                this.$systemFunctions.showResponseFailure();
+                            }                              
+                        });
+                    }                    
+                }
+            },
             // assignTask(item){
             //     this.$systemFunctions.validationErrors='';
             //     this.refreshRole=false;

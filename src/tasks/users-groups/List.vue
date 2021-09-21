@@ -1,5 +1,5 @@
 <template>
-    <div v-if="$systemFunctions.statusTaskLoaded==1">
+    <div  v-show="$parent.method=='list'">
         <div class="card d-print-none mb-2">
             <div class="card-body">
                 <!-- 0=view,1=add,2=edit,3=delete,4=forward,5=print,6=csv,7=filter,8=column header -->
@@ -32,6 +32,20 @@
         <div class="card d-print-none mb-2" v-if="show_column_controls">
             <div class="card-body">
                 <ColumnControl :controller="'Area'" :method="'list'" :columns="$parent.columns"/>            
+            </div>
+        </div>
+        <div class="card d-print-none mb-2" v-if="$parent.permissions.action_2">
+            <div class="card-body">
+                <div class="input-group input-group-sm">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">{{$systemFunctions.getLabel('label_id')}}</span>                  
+                    </div>
+                    <input type="number" id="input_item_id_edit" class="form-control integer_positive col-2">
+                    <div class="input-group-append">
+                        <button type="button" class="btn bg-gradient-primary" @click="editDirect()"><i class="feather icon-edit"></i> {{$systemFunctions.getLabel('action_2')}}</button>
+                    </div>
+                    
+                </div>
             </div>
         </div>
         <div class="card mb-2">
@@ -94,12 +108,16 @@ import Pagination from '@/components/Pagination.vue';
             }
         },
         methods: {
-            
+            editDirect(){
+                let item_id=$('#input_item_id_edit').val();
+                if(item_id>0){
+                    this.$router.push('/'+this.$parent.base_url+'/edit/'+item_id);
+                }
+                //console.log(item_id);
+            }            
         },
         computed:{   
-            getFilteredItems:function(){   
-                
-                if(this.$parent.itemsLoaded){
+            getFilteredItems:function(){
                     let items=this.$parent.items;
                     return items.data;
                     //console.log(items.data);
@@ -112,10 +130,6 @@ import Pagination from '@/components/Pagination.vue';
                     // // }
                     // return true;
                     // });
-                }else{
-                    return [];
-                }
-                
             }, 
         }
 
