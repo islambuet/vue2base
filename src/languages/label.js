@@ -78,6 +78,14 @@ export var labels={
     },
     
     //pagination end
+    label_created_time:{
+        en:"Created Time",
+        bn:"তৈরি সময়"
+    },
+    label_created_date:{
+        en:"Created Date",
+        bn:"তৈরীর তারিখ"
+    },
     label_dashboard:{
         en:"Dashboard",
         bn:"ড্যাশবোর্ড"

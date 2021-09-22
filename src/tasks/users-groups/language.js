@@ -9,7 +9,11 @@ export var labels={
     },    
     label_edit:{
         en:"Edit UserGroup",
-        bn:'Edit ব্যবহারকারী দল'       
+        bn:'সম্পাদনা ব্যবহারকারী দল'       
+    },
+    label_details:{
+        en:"details of UserGroup",
+        bn:'বিস্তারিত ব্যবহারকারী দল'       
     },
     label_num_tasks:{
         en:"#tasks",

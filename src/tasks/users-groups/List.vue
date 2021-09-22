@@ -53,7 +53,7 @@
                 {{$systemFunctions.getLabel('label_task')}}
             </div>
             <div class="card-body" style='overflow-x:auto'>
-                <table class="table table-bordered has-sticky-column">
+                <table class="table table-bordered">
                     <thead class="table-active">
                         <tr>
                             <th class="cell-nowrap d-print-none">{{$systemFunctions.getLabel('label_action')}}</th>
@@ -61,10 +61,8 @@
                                 <th v-if="$parent.columns.hidden.indexOf(key)>=0?false:true" :key="'th_'+key">     
                                     {{ column.label }}
                                 </th> 
-                            </template>  
-                            
+                            </template>
                         </tr>
-                        
                     </thead>
                     <tbody class="table-striped table-hover">
                         <tr v-for="item in getFilteredItems" :key="'item_'+item.id">
@@ -113,8 +111,13 @@ import Pagination from '@/components/Pagination.vue';
                 if(item_id>0){
                     this.$router.push('/'+this.$parent.base_url+'/edit/'+item_id);
                 }
-                //console.log(item_id);
-            }            
+            },   
+            detailsDirect(){
+                let item_id=$('#input_item_id_edit').val();
+                if(item_id>0){
+                    this.$router.push('/'+this.$parent.base_url+'/details/'+item_id);
+                }                
+            }           
         },
         computed:{   
             getFilteredItems:function(){

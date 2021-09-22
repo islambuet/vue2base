@@ -2,16 +2,19 @@
     <div v-if="$systemFunctions.statusTaskLoaded==1">
         <List/>
         <AddEdit/>
+        <Details/>
     </div>
 </template>
 
 <script>
 import List from './List.vue'
 import AddEdit from './AddEdit.vue'
+import Details from './Details.vue'
     export default {
         components: {
             List,
-            AddEdit            
+            AddEdit,
+            Details            
         },
 
         data (){
@@ -75,6 +78,11 @@ import AddEdit from './AddEdit.vue'
                     this.method='edit';        
                     this.editItem(route.params['item_id']);        
                 }
+                else if(route.path.indexOf('/'+this.base_url+'/details/')!=-1)
+                {
+                    this.method='details';        
+                    this.detailsItem(route.params['item_id']);        
+                }
                 else if(route.path.indexOf('/'+this.base_url+'/role/')!=-1)
                 {
                     this.method='role';        
@@ -108,8 +116,6 @@ import AddEdit from './AddEdit.vue'
             },
             setColumns(){
                 this.columns.all={};
-                //this.columns.hidden=['id','name'];
-                
                 let key='id';
                 this.columns.all[key]={label: this.$systemFunctions.getLabel('label_id'),hideable:false};
                 key='name';
@@ -118,22 +124,8 @@ import AddEdit from './AddEdit.vue'
                 this.columns.all[key]={label: this.$systemFunctions.getLabel('label_ordering'),hideable:true};
                 key='status';
                 this.columns.all[key]={label: this.$systemFunctions.getLabel('label_status'),hideable:true};
-
             },  
-            // setColumns(){
-            //     console.log("setColmns called");
-            //     //this.columns.hidden=['id','name'];
-            //     this.columns.all={};
-            //     let key='id';
-            //     this.columns.all[key]={label: this.$systemFunctions.getLabel('label_id'),hidden:this.columns.hidden.indexOf(key)>=0?true:false,hideable:false};
-            //     key='name';
-            //     this.columns.all[key]={label: this.$systemFunctions.getLabel('label_name'),hidden:this.columns.hidden.indexOf(key)>=0?true:false,hideable:true};
-            //     key='ordering';
-            //     this.columns.all[key]={label: this.$systemFunctions.getLabel('label_ordering'),hidden:this.columns.hidden.indexOf(key)>=0?true:false,hideable:true};
-            //     key='status';
-            //     this.columns.all[key]={label: this.$systemFunctions.getLabel('label_status'),hidden:this.columns.hidden.indexOf(key)>=0?true:false,hideable:true};
-
-            // },  
+            
             reloadItems(pagination){
                 this.itemsLoaded=false;
                 this.getItems(pagination);
@@ -188,8 +180,7 @@ import AddEdit from './AddEdit.vue'
                         }                        
                     }                    
                     //Live Search request
-                    if(!('id' in this.item)){
-                        console.log("here too2");
+                    if(!('id' in this.item)){                        
                         this.$systemFunctions.statusDataLoaded=0;
                         this.$axios.get('/'+this.base_url+'/get-item/'+ item_id)
                         .then(res => {
@@ -208,6 +199,25 @@ import AddEdit from './AddEdit.vue'
                         });
                     }                    
                 }
+            },
+            detailsItem(item_id){                
+                this.item={};
+                this.$systemFunctions.statusDataLoaded=0;
+                this.$axios.get('/'+this.base_url+'/get-item/'+ item_id)
+                .then(res => {
+                    this.$systemFunctions.statusDataLoaded = 1;
+                    if(res.data.error==''){
+                        this.item={};
+                        this.item=res.data.item;                     
+                    }
+                }).catch(error => {   
+                    this.$systemFunctions.statusDataLoaded = 1;
+                    if (error.response && error.response.data && error.response.data.error) {
+                        this.$systemFunctions.showResponseError(error.response.data);            
+                    } else {            
+                        this.$systemFunctions.showResponseFailure();
+                    }                              
+                });
             },
             // assignTask(item){
             //     this.$systemFunctions.validationErrors='';

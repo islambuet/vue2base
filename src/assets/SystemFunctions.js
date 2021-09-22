@@ -141,6 +141,24 @@ var systemFunctions = new Vue({
             this.$routes.push("/login");
             
         },
+        displayDate(timestamp){
+            var date = new Date(timestamp);
+            return  ('0' + date.getDate()).slice(-2)
+            +' '+date.toLocaleString('default', { month: 'short' })
+            +' '+date.getFullYear();
+
+        },
+        displayTime(timestamp){
+            
+            var date = new Date(timestamp);
+            return  ('0' + date.getDate()).slice(-2)
+            +' '+date.toLocaleString('default', { month: 'short' })
+            +' '+date.getFullYear()
+            +' ' + ('0' + date.getHours()).slice(-2) 
+            +':' + ('0' + date.getMinutes()).slice(-2)
+            +':' + ('0' + date.getSeconds()).slice(-2);
+
+        }
     }
 });
 export default systemFunctions

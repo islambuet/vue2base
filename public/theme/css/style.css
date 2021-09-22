@@ -219,10 +219,7 @@ a:focus {
 .ui-datepicker{
     z-index: 1001!important;
 }
-table.has-sticky-column td:first-child,table.has-sticky-column th:first-child{
-    position: sticky;
-    left: 0;    
-}
+
    /* overwrite bootstrap css */
 .btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show > .btn-primary.dropdown-toggle {
     color: #fff;

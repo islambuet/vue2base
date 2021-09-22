@@ -17,27 +17,33 @@
             <ValidationError/>
             <form id="formSaveItem">
               <input type="hidden" name="id" :value="$parent.item.id" />
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">{{$systemFunctions.getLabel('label_name')}}</span>                  
+              <div class="row mb-2">
+                <div class="col-4">
+                    <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_name')}}</label>
                 </div>
-                <input type="text" class="form-control" name="item[name]" v-model="$parent.item.name" placeholder="Name" required>
+                <div class="col-lg-4 col-8">
+                    <input type="text" class="form-control" name="item[name]" v-model="$parent.item.name" placeholder="Name" required>
+                </div>
+              </div>          
+              <div class="row mb-2">
+                <div class="col-4">
+                    <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_ordering')}}</label>
+                </div>
+                <div class="col-lg-4 col-8">
+                    <input type="number" class="form-control integer_positive" name="item[ordering]" v-model="$parent.item.ordering" placeholder="Ordering" required>
+                </div>
               </div> 
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">{{$systemFunctions.getLabel('label_ordering')}}</span>                  
+              <div class="row mb-2">
+                <div class="col-4">
+                    <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_status')}}</label>
                 </div>
-                <input type="number" class="form-control integer_positive" name="item[ordering]" v-model="$parent.item.ordering" placeholder="Ordering" required>
-              </div> 
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">{{$systemFunctions.getLabel('label_status')}}</span>                  
-                </div>
-                <select class="form-control" name="item[status]" v-model="$parent.item.status" required>                                    
-                      <option :value="$systemFunctions.dbStatus.ACTIVE">{{$systemFunctions.dbStatus.ACTIVE}}</option>
-                      <option :value="$systemFunctions.dbStatus.INACTIVE">{{$systemFunctions.dbStatus.INACTIVE}}</option>                      
+                <div class="col-lg-4 col-8">
+                  <select class="form-control" name="item[status]" v-model="$parent.item.status" required>                                    
+                    <option :value="$systemFunctions.dbStatus.ACTIVE">{{$systemFunctions.dbStatus.ACTIVE}}</option>
+                    <option :value="$systemFunctions.dbStatus.INACTIVE">{{$systemFunctions.dbStatus.INACTIVE}}</option>                      
                   </select>
-              </div>               
+                </div>
+              </div>      
             </form>
           </div>          
         </div>  
