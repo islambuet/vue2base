@@ -91,7 +91,7 @@ import AddEdit from './AddEdit.vue'
                         this.permissions=res.data.permissions;
                         this.itemDefault=res.data.itemDefault;
                         this.modules_tasks=res.data.modules_tasks;
-                        this.columns.hidden=[];//from response
+                        this.columns.hidden=res.data.hidden_columns;
                         this.setColumns();
                         this.$systemFunctions.statusTaskLoaded=1;
                         this.routing(this.$route);                        

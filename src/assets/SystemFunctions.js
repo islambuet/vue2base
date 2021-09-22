@@ -42,6 +42,7 @@ function initialData() {
         statusTaskLoaded: 0,    //Loading=0,success=1,failed=-1,acceesdenied=-2, site_off_line = -3  for all page
         statusDataLoaded: 1,    //Loading=0,loaed=1    
         validationErrors:'',
+        showJumpActions:true, 
         dbStatus:{'YES':'Yes','NO':'No','ACTIVE':'Active','INACTIVE':'In-Active','DELETE':'Deleted'}
     }
 }
@@ -99,7 +100,7 @@ var systemFunctions = new Vue({
             else if (data.error == 'USER_SESSION_EXPIRED') {                
                 localStorage.setItem(this.localStorageAuthTokenStr, '');
                 this.$axios.defaults.headers.common['Authorization'] = '';
-                this.user = this.getInitialUser();                
+                this.user = initialData().user;                
                 this.$routes.push("/login");
                 this.$toast.error(this.$systemFunctions.getLabel(data.errorMessage));
             }

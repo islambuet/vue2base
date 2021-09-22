@@ -9,7 +9,7 @@
                 </template>
             </div>
             <div class="text-center" v-if="allow_save">
-                <button type="button" class="btn btn-sm bg-gradient-primary" onclick="window.print();"><i class="feather icon-save"></i> {{$systemFunctions.getLabel('button_save_column_controls')}}</button>
+                <button type="button" class="btn btn-sm bg-gradient-primary" @click="saveHiddenColumns"><i class="feather icon-save"></i> {{$systemFunctions.getLabel('button_save_column_controls')}}</button>
             </div>
         </div>
     </div>
@@ -27,14 +27,15 @@ export default {
             type: Boolean,
             default:true
         },
-        // controller: {
-        //     type: String,
-        //     required: true
-        // },
-        // method: {
-        //     type: String,
-        //     required: true
-        // },
+        url: {
+            type: String,
+            required: true
+        },
+        method: {
+            type: String,
+            default: 'list'
+            
+        },
     }, 
     methods:{
         toggleControlColumns:function (event)
@@ -47,29 +48,31 @@ export default {
             }else
             {
                 this.columns.hidden.push(key);
-            } 
-            console.log(this.columns.hidden);            
+            }    
         },        
-        save_hidden_columns:function()
+        saveHiddenColumns:function()
         {
-            this.$system_variables.status_data_loaded=0; 
-            var form_data=new FormData(document.getElementById('form_column_control'));       
-            form_data.append ('token_auth', this.$system_variables.user.token_auth); 
-            this.$axios.post('/column_control/save',form_data)
-            .then(response=>{          
-                this.$system_variables.status_data_loaded=1;
-                if(response.data.error_type)        
-                {            
-                    this.$bvToast.toast(this.$system_variables.get_label(response.data.error_type), {title: this.$system_variables.get_label('label_error'),variant:'danger',autoHideDelay: 5000,appendToast: false});
+            //this.$systemFunctions.statusDataLoaded=0;
+            var form_data=new FormData();            
+            form_data.append ('url', this.url);
+            form_data.append ('method', this.method);
+            for(let i=0;i<this.columns.hidden.length;i++){
+                form_data.append ('hidden_columns[]', this.columns.hidden[i]);
+            }
+            this.$axios.post('/columns-control/save-item',form_data)
+            .then(res => {
+                this.$systemFunctions.statusDataLoaded = 1;
+                if(res.data.error==''){
+                    this.$systemFunctions.showSuccessMessage(this.$systemFunctions.getLabel('msg_success_saved'));
+                    
                 }
-                else
-                {
-                    this.$bvToast.toast(this.$system_variables.get_label("Saved SuccessFully"), {title: this.$system_variables.get_label('label_Success'),variant:'Success',autoHideDelay: 5000,appendToast: false});              
-                }                 
-            })
-            .catch(error => {   
-                this.$system_variables.status_data_loaded=1;
-                this.$bvToast.toast(this.$system_variables.get_label("Response Error"), {title: this.$system_variables.get_label('label_error'),variant:'danger',autoHideDelay: 5000,appendToast: false});   
+            }).catch(error => {                      
+                this.$systemFunctions.statusDataLoaded = 1;
+                if (error.response && error.response.data && error.response.data.error) {
+                    this.$systemFunctions.showResponseError(error.response.data);            
+                } else {            
+                    this.$systemFunctions.showResponseFailure();
+                }                              
             });
         }
     }

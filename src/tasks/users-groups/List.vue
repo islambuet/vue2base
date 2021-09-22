@@ -29,17 +29,20 @@
                 <b-button class="mr-2 mb-2" variant="success" v-if="$parent.permissions.action0" @click="$parent.init" >{{$systemFunctions.getLabel('button_refresh')}}</b-button> -->
             </div>
         </div>    
-        <ColumnControl :controller="'Area'" :method="'list'" :columns="$parent.columns" v-if="show_column_controls"/> 
+        <ColumnControl :url="$parent.base_url" :columns="$parent.columns"  v-if="show_column_controls"/> 
         
-        <div class="card d-print-none mb-2" v-if="$parent.permissions.action_2">
+        <div class="card d-print-none mb-2" v-if="$systemFunctions.showJumpActions">
             <div class="card-body">
                 <div class="input-group input-group-sm">
                     <div class="input-group-prepend">
                         <span class="input-group-text">{{$systemFunctions.getLabel('label_id')}}</span>                  
                     </div>
                     <input type="number" id="input_item_id_edit" class="form-control integer_positive col-2">
-                    <div class="input-group-append">
+                    <div class="input-group-append ml-1"  v-if="$parent.permissions.action_2">
                         <button type="button" class="btn bg-gradient-primary" @click="editDirect()"><i class="feather icon-edit"></i> {{$systemFunctions.getLabel('action_2')}}</button>
+                    </div>
+                    <div class="input-group-append ml-1">
+                        <button type="button" class="btn bg-gradient-primary" @click="detailsDirect()"><i class="feather icon-camera"></i> {{$systemFunctions.getLabel('action_details')}}</button>
                     </div>
                     
                 </div>

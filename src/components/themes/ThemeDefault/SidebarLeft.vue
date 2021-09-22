@@ -3,7 +3,7 @@
         <ul class="list-unstyled">
         <li @click="$systemHtmlElementsAction.click_task_links($event)">
           <router-link to="/">
-            {{$systemFunctions.getLabel('label_dashboard')}}
+            <i class="bi bi-life-preserver"></i> {{$systemFunctions.getLabel('label_dashboard')}}
           </router-link>
           </li>
         <menu-tree v-for="(item, index) in $systemFunctions.user.tasks" :key="index" :menu="$systemFunctions.user.tasks[index]" :item_id_prefix="'side_menu_user_'"></menu-tree>        
