@@ -57,15 +57,11 @@
                                 <button class="btn btn-sm bg-gradient-primary dropdown-toggle waves-effect waves-light" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{$systemFunctions.getLabel('label_action')}}</button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
                                     <router-link v-if="$parent.permissions.action_2"  :to="'/'+$parent.base_url+'/details/'+item.id" class="dropdown-item text-info btn-sm" ><i class="feather icon-camera"></i> {{$systemFunctions.getLabel('action_details')}}</router-link>
-                                    <router-link v-if="$parent.permissions.action_2"  :to="'/'+$parent.base_url+'/edit/'+item.id" class="dropdown-item text-info btn-sm" ><i class="feather icon-edit"></i> {{$systemFunctions.getLabel('action_2')}}</router-link>
-                                    <router-link v-if="$parent.permissions.action_2"  :to="'/'+$parent.base_url+'/role/'+item.id" class="dropdown-item text-info btn-sm" ><i class="feather icon-check-square"></i> {{$systemFunctions.getLabel('action_assign_Task')}}</router-link>
+                                    <router-link v-if="$parent.permissions.action_2"  :to="'/'+$parent.base_url+'/edit/'+item.id" class="dropdown-item text-info btn-sm" ><i class="feather icon-edit"></i> {{$systemFunctions.getLabel('action_2')}}</router-link>                                    
                                 </div>
                             </td>
                             <template v-for="(column,key) in $parent.columns.all">                         
-                                <td class="col-1" v-if="$parent.columns.hidden.indexOf(key)>=0?false:true" :key="'td_'+key">                        
-                                    <!-- <div v-if="key=='created_at'">{{$systemFunctions.displayTime(item[key]) }}</div>
-                                    <div v-else-if="key=='num_tasks'">{{item['action_0'].split(",").length - 2}}</div>
-                                    <div v-else>{{ item[key] }}</div> -->
+                                <td class="col-1" v-if="$parent.columns.hidden.indexOf(key)>=0?false:true" :key="'td_'+key">                                                           
                                     {{ item[key] }}
                                 </td>     
                             </template>     

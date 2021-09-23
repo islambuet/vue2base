@@ -2,8 +2,7 @@
     <div v-if="$systemFunctions.statusTaskLoaded==1">
         <List/>
         <AddEdit/>
-        <Details/>
-        <Role/>
+        <Details/>        
     </div>
 </template>
 
@@ -11,18 +10,16 @@
 import List from './List.vue'
 import AddEdit from './AddEdit.vue'
 import Details from './Details.vue'
-import Role from './Role.vue'
     export default {
         components: {
             List,
             AddEdit,
-            Details,
-            Role            
+            Details,            
         },
 
         data (){
             return {
-                base_url:'users-groups',
+                base_url:'system-configurations',
                 method:'list',        
                 permissions:{},
                 itemDefault: {},                
@@ -33,8 +30,7 @@ import Role from './Role.vue'
                 modules_tasks:{},
                 columns:{all:{},hidden:[]},
                 hidden_columns:[],
-                pagination: {current_page: 1,per_page_options: [1,2,3,4,5,10,20,500,1000],per_page:2,show_all_items:true},
-                module_task_max_action:8,
+                pagination: {current_page: 1,per_page_options: [10,20,50,100,500,1000],per_page:50,show_all_items:true},                
             }
         },
         created(){    
@@ -73,12 +69,7 @@ import Role from './Role.vue'
                 {
                     this.method='details';        
                     this.detailsItem(route.params['item_id']);        
-                }
-                else if(route.path.indexOf('/'+this.base_url+'/role/')!=-1)
-                {
-                    this.method='role';        
-                    this.roleItem(route.params['item_id']);        
-                }
+                }                
             },
             init(){
                 this.$systemFunctions.statusTaskLoaded=0;
@@ -88,15 +79,15 @@ import Role from './Role.vue'
                     if(res.data.error==''){
                         // this.setColumnCsv();                        
                         this.permissions=res.data.permissions;
-                        this.itemDefault=res.data.itemDefault;
-                        this.modules_tasks=res.data.modules_tasks;
+                        this.itemDefault=res.data.itemDefault;                        
                         this.columns.hidden=res.data.hidden_columns;
                         this.setColumns();
                         this.$systemFunctions.statusTaskLoaded=1;
                         this.routing(this.$route);                        
                     }
                     this.$systemFunctions.statusDataLoaded = 1;
-                }).catch(error => {                      
+                }).catch(error => {  
+                    console.log(error);                    
                     this.$systemFunctions.statusDataLoaded = 1;
                     if (error.response && error.response.data && error.response.data.error) {
                         this.$systemFunctions.showResponseError(error.response.data);            
@@ -115,25 +106,19 @@ import Role from './Role.vue'
                     filter:{type:'number',from:'',to:''}
                     };
                 
-                key='name';
+                key='purpose';
                 this.columns.all[key]={
-                    label: this.$systemFunctions.getLabel('label_name'),
+                    label: this.$systemFunctions.getLabel('label_purpose'),
                     hideable:true,
                     filterable:true,
                     filter:{type:'text',from:'',to:''}
                     };
-                key='num_tasks';
+                key='config_value';
                 this.columns.all[key]={
-                    label: this.$systemFunctions.getLabel('label_num_tasks'),
+                    label: this.$systemFunctions.getLabel('label_config_value'),
                     hideable:true,
                     filterable:false                    
-                };
-                key='ordering';
-                this.columns.all[key]={
-                    label: this.$systemFunctions.getLabel('label_ordering'),
-                    hideable:true,
-                    filterable:false                    
-                };
+                };                
                 key='status';
                 this.columns.all[key]={
                     label: this.$systemFunctions.getLabel('label_status'),
@@ -182,8 +167,7 @@ import Role from './Role.vue'
             getFilteredItems:function(){ 
                 this.itemsFiltered=this.$systemFunctions.getFilteredItems(this.items.data,this.columns.all);
                 for(let i=0;i<this.itemsFiltered.length;i++){
-                    this.itemsFiltered[i]['created_at']=this.$systemFunctions.displayTime(this.itemsFiltered[i]['created_at']);
-                    this.itemsFiltered[i]['num_tasks']= this.itemsFiltered[i]['action_0'].split(",").length - 2;
+                    this.itemsFiltered[i]['created_at']=this.$systemFunctions.displayTime(this.itemsFiltered[i]['created_at']);                    
                 }               
             },            
             addItem(){
@@ -241,69 +225,6 @@ import Role from './Role.vue'
             detailsItem(item_id){                
                 this.setItemByItemId(item_id);
             },
-            roleItem(item_id){                
-                if(!(this.permissions.action_2))
-                {
-                    this.$systemFunctions.statusTaskLoaded=-2;
-                }
-                else
-                {
-                    this.setItemByItemId(item_id);
-                }
-            },
-            // assignTask(item){
-            //     this.$systemFunctions.validationErrors='';
-            //     this.refreshRole=false;
-            //     let $this=this;
-            //     //settimeout for rerender the div
-            //     setTimeout(() => {
-            //         $this.refreshRole=true;
-            //         $this.item={};
-            //         Object.assign($this.item, item);                
-            //      }, 1);
-                
-            // },            
-            // saveItem(){
-                
-            //     this.$systemFunctions.statusDataLoaded=0;
-            //     this.$axios.post('/users-groups/save-item',new FormData(document.getElementById('formSave')))
-            //     .then(res => {
-            //         this.$systemFunctions.statusDataLoaded = 1;
-            //         if(res.data.error==''){
-            //             this.$systemFunctions.showSuccessMessage(this.$systemFunctions.getLabel('msg_success_saved'));
-            //             $('#modalAddEdit').modal('hide');
-            //             this.getItems(this.pagination);
-            //         }
-            //     }).catch(error => {                      
-            //         this.$systemFunctions.statusDataLoaded = 1;
-            //         if (error.response && error.response.data && error.response.data.error) {
-            //             this.$systemFunctions.showResponseError(error.response.data);            
-            //         } else {            
-            //             this.$systemFunctions.showResponseFailure();
-            //         }                              
-            //     });
-            // },
-            // saveRole(form_id){
-            //     this.$systemFunctions.statusDataLoaded=0;
-            //     this.$axios.post('/users-groups/save-role/'+this.item.id,new FormData(document.getElementById(form_id)))
-            //     .then(res => {
-            //         this.$systemFunctions.statusDataLoaded = 1;
-            //         if(res.data.error==''){                        
-            //             this.$systemFunctions.showSuccessMessage(this.$systemFunctions.getLabel('msg_success_saved'));
-            //             $('#modalAssignTask').modal('hide');
-            //             this.getItems(this.pagination);
-            //         }
-            //     }).catch(error => {                      
-            //         this.$systemFunctions.statusDataLoaded = 1;
-            //         if (error.response && error.response.data && error.response.data.error) {
-            //             this.$systemFunctions.showResponseError(error.response.data);            
-            //         } else {            
-            //             this.$systemFunctions.showResponseFailure();
-            //         }                              
-            //     });
-
-            // },
-            
         }
 
     }
