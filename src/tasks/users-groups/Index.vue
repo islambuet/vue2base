@@ -3,6 +3,7 @@
         <List/>
         <AddEdit/>
         <Details/>
+        <Role/>
     </div>
 </template>
 
@@ -10,11 +11,13 @@
 import List from './List.vue'
 import AddEdit from './AddEdit.vue'
 import Details from './Details.vue'
+import Role from './Role.vue'
     export default {
         components: {
             List,
             AddEdit,
-            Details            
+            Details,
+            Role            
         },
 
         data (){
@@ -30,21 +33,8 @@ import Details from './Details.vue'
                 modules_tasks:{},
                 columns:{all:{},hidden:[]},
                 hidden_columns:[],
-                pagination: {current_page: 1,per_page_options: [1,2,3,4,5,10,20,500,1000],per_page:10,show_all_items:true},
-                // module_task_max_action:0,
-
-                /*refreshRole:false,
-                permissions:{'action_0':0},
-                columns:{csv:[]},
-                //csv:all-hidden,hidden,control/all,filter/search
-                itemDefault: {id: 0,name: '',ordering: '',status: ''},
-                items: {data:[]},
-                item: {},                
-                editing: false,
-                searchString: '',
-                pagination: {current_page: 1,per_page_options: [2,10,20,500,1000],per_page:20,show_all_items:true},
-                modules_tasks:{'max_level':1,'tree':[]}, 
-                module_task_max_action:8,*/
+                pagination: {current_page: 1,per_page_options: [1,2,3,4,5,10,20,500,1000],per_page:2,show_all_items:true},
+                module_task_max_action:8,
             }
         },
         created(){    
@@ -87,7 +77,7 @@ import Details from './Details.vue'
                 else if(route.path.indexOf('/'+this.base_url+'/role/')!=-1)
                 {
                     this.method='role';        
-                    //this.role(route.params['item_id']);        
+                    this.roleItem(route.params['item_id']);        
                 }
             },
             init(){
@@ -199,6 +189,35 @@ import Details from './Details.vue'
                     Object.assign(this.item, this.itemDefault);           
                 }
             },
+            setItemByItemId(item_id){
+                this.item={};
+                //local search
+                let items=this.items.data;
+                for(let i=0;i<items.length;i++){
+                    if(items[i].id==item_id){
+                        Object.assign(this.item, items[i]);
+                    }                        
+                }                    
+                //Live Search request
+                if(!('id' in this.item)){                        
+                    this.$systemFunctions.statusDataLoaded=0;
+                    this.$axios.get('/'+this.base_url+'/get-item/'+ item_id)
+                    .then(res => {
+                        this.$systemFunctions.statusDataLoaded = 1;
+                        if(res.data.error==''){
+                            this.item={};
+                            this.item=res.data.item;                     
+                        }
+                    }).catch(error => {   
+                        this.$systemFunctions.statusDataLoaded = 1;
+                        if (error.response && error.response.data && error.response.data.error) {
+                            this.$systemFunctions.showResponseError(error.response.data);            
+                        } else {            
+                            this.$systemFunctions.showResponseFailure();
+                        }                              
+                    });
+                }
+            },
             editItem(item_id){
                 this.$systemFunctions.validationErrors='';
                 if(!(this.permissions.action_2))
@@ -206,54 +225,22 @@ import Details from './Details.vue'
                     this.$systemFunctions.statusTaskLoaded=-2;
                 }
                 else
-                { 
-                    this.item={};
-                    //local search
-                    let items=this.items.data;
-                    for(let i=0;i<items.length;i++){
-                        if(items[i].id==item_id){
-                            Object.assign(this.item, items[i]);
-                        }                        
-                    }                    
-                    //Live Search request
-                    if(!('id' in this.item)){                        
-                        this.$systemFunctions.statusDataLoaded=0;
-                        this.$axios.get('/'+this.base_url+'/get-item/'+ item_id)
-                        .then(res => {
-                            this.$systemFunctions.statusDataLoaded = 1;
-                            if(res.data.error==''){
-                                this.item={};
-                                this.item=res.data.item;                     
-                            }
-                        }).catch(error => {   
-                            this.$systemFunctions.statusDataLoaded = 1;
-                            if (error.response && error.response.data && error.response.data.error) {
-                                this.$systemFunctions.showResponseError(error.response.data);            
-                            } else {            
-                                this.$systemFunctions.showResponseFailure();
-                            }                              
-                        });
-                    }                    
+                {
+                    this.setItemByItemId(item_id);                      
                 }
             },
             detailsItem(item_id){                
-                this.item={};
-                this.$systemFunctions.statusDataLoaded=0;
-                this.$axios.get('/'+this.base_url+'/get-item/'+ item_id)
-                .then(res => {
-                    this.$systemFunctions.statusDataLoaded = 1;
-                    if(res.data.error==''){
-                        this.item={};
-                        this.item=res.data.item;                     
-                    }
-                }).catch(error => {   
-                    this.$systemFunctions.statusDataLoaded = 1;
-                    if (error.response && error.response.data && error.response.data.error) {
-                        this.$systemFunctions.showResponseError(error.response.data);            
-                    } else {            
-                        this.$systemFunctions.showResponseFailure();
-                    }                              
-                });
+                this.setItemByItemId(item_id);
+            },
+            roleItem(item_id){                
+                if(!(this.permissions.action_2))
+                {
+                    this.$systemFunctions.statusTaskLoaded=-2;
+                }
+                else
+                {
+                    this.setItemByItemId(item_id);
+                }
             },
             // assignTask(item){
             //     this.$systemFunctions.validationErrors='';

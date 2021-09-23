@@ -1,5 +1,5 @@
 <template>    
-    <div v-if="$parent.permissions.action_0"  v-show="($systemFunctions.statusDataLoaded==1) &&($parent.method=='details')">
+    <div v-if="$parent.permissions.action_0 &&($parent.method=='details')">
         <div class="card d-print-none mb-2">
             <div class="card-body">
               <router-link :to="'/'+$parent.base_url" class="mr-2 mb-2 btn btn-sm bg-gradient-primary" ><i class="feather icon-corner-up-left"></i> {{$systemFunctions.getLabel('action_back')}}</router-link>

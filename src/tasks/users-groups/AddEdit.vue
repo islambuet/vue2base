@@ -1,5 +1,5 @@
 <template>    
-    <div v-if="$parent.permissions.action_1 || $parent.permissions.action_2"  v-show="($systemFunctions.statusDataLoaded==1) &&($parent.method=='add' || $parent.method=='edit')">
+    <div v-if="($parent.permissions.action_1 || $parent.permissions.action_2) &&($parent.method=='add' || $parent.method=='edit')">
         <div class="card d-print-none mb-2">
             <div class="card-body">
               <router-link :to="'/'+$parent.base_url" class="mr-2 mb-2 btn btn-sm bg-gradient-primary" ><i class="feather icon-corner-up-left"></i> {{$systemFunctions.getLabel('action_back')}}</router-link>
@@ -91,37 +91,6 @@ export default {
               this.$systemFunctions.showResponseFailure();
           }                              
       });
-
-      
-      // this.$system_variables.status_data_loaded=0; 
-      // var form_data=new FormData(document.getElementById('form_save'));       
-      // form_data.append ('token_auth', this.$system_variables.user.token_auth); 
-      // this.$axios.post('/sys_user_group/save_item',form_data)
-      // .then(response=>{          
-      //   this.$system_variables.status_data_loaded=1;
-      //   if(response.data.error_type)        
-      //   {            
-      //     this.$bvToast.toast(this.$system_variables.get_label(response.data.error_type), {title: this.$system_variables.get_label('label_error'),variant:'danger',autoHideDelay: 5000,appendToast: false});
-      //   }
-      //   else
-      //   {
-      //       this.$parent.reload_items=true;
-      //       this.$system_variables.status_data_loaded=1;
-      //       this.$bvToast.toast(this.$system_variables.get_label("Saved SuccessFully"), {title: this.$system_variables.get_label('label_Success'),variant:'Success',autoHideDelay: 5000,appendToast: false});              
-      //       if(save_and_new)
-      //       {
-      //         this.$router.push("/sys_user_group/add");
-      //       }
-      //       else
-      //       {
-      //         this.$router.push("/sys_user_group");
-      //       }
-      //   }                 
-      // })
-      // .catch(error => {   
-      //   this.$system_variables.status_data_loaded=1;
-      //   this.$bvToast.toast(this.$system_variables.get_label("Response Error"), {title: this.$system_variables.get_label('label_error'),variant:'danger',autoHideDelay: 5000,appendToast: false});   
-      // });
     }
   }  
 }
