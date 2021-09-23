@@ -16,8 +16,8 @@ export var labels={
         bn:'বিস্তারিত ব্যবহারকারী দল'       
     },
     label_num_tasks:{
-        en:"#tasks",
-        bn:"#টাস্ক"
+        en:"Number Of tasks",
+        bn:"টাস্ক সংখ্যা "
     }, 
     action_assign_Task:{
         en:"Assign Tasks",

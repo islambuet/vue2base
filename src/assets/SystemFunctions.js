@@ -212,9 +212,33 @@ var systemFunctions = new Vue({
                     }
                 }
                 return true;
-            }); 
-
-        }
+            });
+        },
+        exportCsv(columns,datas,filename="output.csv")
+        {
+            var csvStr="";           
+            for(let  key in columns.all){
+                let column=columns.all[key];
+                if((columns.hidden.indexOf(key))==-1){
+                    csvStr=csvStr+'"'+column.label+'",';
+                }               
+            }            
+            csvStr+="\n";
+            for (var j=0;j<datas.length;j++)
+            {
+                for(let  key in columns.all){                    
+                    if((columns.hidden.indexOf(key))==-1){                        
+                        csvStr=csvStr+'"'+datas[j][key]+'",'; 
+                    }               
+                }  
+                csvStr+="\n";
+            }            
+            var hiddenElement = document.createElement('a');
+            hiddenElement.href = 'data:text/csv;charset=utf-8,%EF%BB%BF' + encodeURI(csvStr);
+            hiddenElement.target = '_blank';
+            hiddenElement.download = filename;
+            hiddenElement.click();  
+        },
     }
 });
 export default systemFunctions

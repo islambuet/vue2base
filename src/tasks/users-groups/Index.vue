@@ -180,8 +180,12 @@ import Role from './Role.vue'
                     });
                 }                
             }, 
-            getFilteredItems:function(){                
+            getFilteredItems:function(){ 
                 this.itemsFiltered=this.$systemFunctions.getFilteredItems(this.items.data,this.columns.all);
+                for(let i=0;i<this.itemsFiltered.length;i++){
+                    this.itemsFiltered[i]['created_at']=this.$systemFunctions.displayTime(this.itemsFiltered[i]['created_at']);
+                    this.itemsFiltered[i]['num_tasks']= this.itemsFiltered[i]['action_0'].split(",").length - 2;
+                }               
             },            
             addItem(){
                 this.$systemFunctions.validationErrors='';

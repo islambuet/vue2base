@@ -8,25 +8,11 @@
                 <router-link v-if="$parent.permissions.action_1"  :to="'/'+$parent.base_url+'/add'" class="mr-2 mb-2 btn btn-sm bg-gradient-primary" ><i class="feather icon-plus-circle"></i> {{$systemFunctions.getLabel('action_1')}}</router-link>
 
                 <button type="button" v-if="$parent.permissions.action_5" class="mr-2 mb-2 btn btn-sm bg-gradient-primary" onclick="window.print();"><i class="feather icon-printer"></i> {{$systemFunctions.getLabel('action_5')}}</button>
-                <button type="button" v-if="$parent.permissions.action_6" class="mr-2 mb-2 btn btn-sm bg-gradient-primary" onclick="window.print();"><i class="feather icon-download"></i> {{$systemFunctions.getLabel('action_6')}}</button>
+                <button type="button" v-if="$parent.permissions.action_6" class="mr-2 mb-2 btn btn-sm bg-gradient-primary" @click="$systemFunctions.exportCsv($parent.columns,$parent.itemsFiltered,'usergroups.csv')"><i class="feather icon-download"></i> {{$systemFunctions.getLabel('action_6')}}</button>
 
                 <button type="button" v-if="$parent.permissions.action_8" class="mr-2 mb-2 btn btn-sm" :class="[show_column_controls?'bg-gradient-success':'bg-gradient-primary']" @click="show_column_controls = !show_column_controls"><i class="feather icon-command"></i> {{$systemFunctions.getLabel('action_8')}}</button>
 
                 <button type="button" v-if="$parent.permissions.action_0" class="mr-2 mb-2 btn btn-sm bg-gradient-primary" @click="$parent.itemsLoaded=false;$parent.init()"><i class="feather icon-rotate-cw"></i> {{$systemFunctions.getLabel('button_refresh')}}</button>
-
-                
-
-                <!-- <button type="button" v-if="$parent.permissions.action_0" class="mr-2 mb-2 btn btn-sm bg-gradient-primary" onclick="window.print();"><i class="feather icon-download"></i> {{$systemFunctions.getLabel('action_refresh')}}</button> -->
-
-
-
-                <!-- <router-link  to="/sys_user_group/add" :class="'btn btn-success mr-2 mb-2'" >{{$systemFunctions.getLabel('button_new')}}</router-link>            
-                <b-button onclick="window.print();" class="mr-2 mb-2" variant="success" v-if="$parent.permissions.action5" >{{$systemFunctions.getLabel('button_print')}}</b-button>
-                <b-button @click="$system_functions.export_csv(get_csv_headers,modified_items)" class="mr-2 mb-2" variant="success" v-if="$parent.permissions.action6" >{{$systemFunctions.getLabel('button_csv')}}</b-button>          
-                <b-button class="mr-2 mb-2" variant="success" v-if="$parent.permissions.action7" :pressed.sync="show_fitler_options">{{$systemFunctions.getLabel('button_search')}}</b-button>
-                <b-button class="mr-2 mb-2" variant="success" v-if="$parent.permissions.action8" :pressed.sync="show_column_controls">{{$systemFunctions.getLabel('button_column_control')}}</b-button>
-                
-                <b-button class="mr-2 mb-2" variant="success" v-if="$parent.permissions.action0" @click="$parent.init" >{{$systemFunctions.getLabel('button_refresh')}}</b-button> -->
             </div>
         </div>    
         <ColumnControl :url="$parent.base_url" :columns="$parent.columns"  v-if="show_column_controls"/> 
@@ -77,9 +63,10 @@
                             </td>
                             <template v-for="(column,key) in $parent.columns.all">                         
                                 <td class="col-1" v-if="$parent.columns.hidden.indexOf(key)>=0?false:true" :key="'td_'+key">                        
-                                    <div v-if="key=='created_at'">{{$systemFunctions.displayTime(item[key]) }}</div>
+                                    <!-- <div v-if="key=='created_at'">{{$systemFunctions.displayTime(item[key]) }}</div>
                                     <div v-else-if="key=='num_tasks'">{{item['action_0'].split(",").length - 2}}</div>
-                                    <div v-else>{{ item[key] }}</div>
+                                    <div v-else>{{ item[key] }}</div> -->
+                                    {{ item[key] }}
                                 </td>     
                             </template>     
                             
