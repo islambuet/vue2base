@@ -123,12 +123,18 @@ import Role from './Role.vue'
                     filterable:true,
                     filter:{type:'text',from:'',to:''}
                     };
+                key='num_tasks';
+                this.columns.all[key]={
+                    label: this.$systemFunctions.getLabel('label_num_tasks'),
+                    hideable:true,
+                    filterable:false                    
+                };
                 key='ordering';
                 this.columns.all[key]={
                     label: this.$systemFunctions.getLabel('label_ordering'),
                     hideable:true,
                     filterable:false                    
-                    };
+                };
                 key='status';
                 this.columns.all[key]={
                     label: this.$systemFunctions.getLabel('label_status'),

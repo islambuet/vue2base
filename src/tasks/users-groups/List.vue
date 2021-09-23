@@ -77,7 +77,9 @@
                             </td>
                             <template v-for="(column,key) in $parent.columns.all">                         
                                 <td class="col-1" v-if="$parent.columns.hidden.indexOf(key)>=0?false:true" :key="'td_'+key">                        
-                                    {{ item[key] }}
+                                    <div v-if="key=='created_at'">{{$systemFunctions.displayTime(item[key]) }}</div>
+                                    <div v-else-if="key=='num_tasks'">{{item['action_0'].split(",").length - 2}}</div>
+                                    <div v-else>{{ item[key] }}</div>
                                 </td>     
                             </template>     
                             
