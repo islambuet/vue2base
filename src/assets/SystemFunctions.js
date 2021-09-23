@@ -158,6 +158,62 @@ var systemFunctions = new Vue({
             +':' + ('0' + date.getMinutes()).slice(-2)
             +':' + ('0' + date.getSeconds()).slice(-2);
 
+        },
+        getFilteredItems(datas,columns){
+            return datas.filter((item)=>{
+                for(let  key in columns)
+                {
+                    let column = columns[key];
+                    if(column.filterable){
+                        if(column.filter.type=='number'){
+                            if(column.filter.from.length>0){
+                                if(parseFloat(item[key])<parseFloat(column.filter.from))
+                                {                        
+                                    return false;
+                                }
+                            }
+                            if(column.filter.to.length>0){
+                                if(parseFloat(item[key])>parseFloat(column.filter.to))
+                                {                        
+                                    return false;
+                                }
+                            }
+                        }
+                        else if(column.filter.type=='text'){
+                            if(column.filter.from.length>0){
+                                if(item[key].toLowerCase().indexOf(column.filter.from.toLowerCase())==-1)
+                                {
+                                    return false;
+                                }
+                            }
+                        }
+                        else if(column.filter.type=='dropdown'){
+                            if(column.filter.from.length>0){
+                                if(item[key]!=column.filter.from)
+                                {                         
+                                    return false;
+                                } 
+                            }
+                        }
+                        else if(column.filter.type=='date'){
+                            if(column.filter.from.length>0){                               
+                                if(new Date(item[key])<new Date(column.filter.from+" 00:00:00"))
+                                {                        
+                                    return false;
+                                }
+                            }
+                            if(column.filter.to.length>0){
+                                if(new Date(item[key])>new Date(column.filter.to+" 00:00:00"))
+                                {                        
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+                return true;
+            }); 
+
         }
     }
 });

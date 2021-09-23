@@ -23,13 +23,14 @@ import Details from './Details.vue'
                 method:'list',        
                 permissions:{},
                 itemDefault: {},                
-                item: {},
-                items: {data:[]},
+                item: {},           //single item
+                items: {data:[]},   //from Laravel server with pagination and info
+                itemsFiltered: [],    //for display
                 itemsLoaded:false,
                 modules_tasks:{},
                 columns:{all:{},hidden:[]},
                 hidden_columns:[],
-                pagination: {current_page: 1,per_page_options: [1,2,3,4,5,10,20,500,1000],per_page:3,show_all_items:true},
+                pagination: {current_page: 1,per_page_options: [1,2,3,4,5,10,20,500,1000],per_page:10,show_all_items:true},
                 // module_task_max_action:0,
 
                 /*refreshRole:false,
@@ -105,7 +106,8 @@ import Details from './Details.vue'
                         this.routing(this.$route);                        
                     }
                     this.$systemFunctions.statusDataLoaded = 1;
-                }).catch(error => {                      
+                }).catch(error => {  
+                    console.log(error);                    
                     this.$systemFunctions.statusDataLoaded = 1;
                     if (error.response && error.response.data && error.response.data.error) {
                         this.$systemFunctions.showResponseError(error.response.data);            
@@ -115,15 +117,45 @@ import Details from './Details.vue'
                 });
             },
             setColumns(){
-                this.columns.all={};
+                this.columns.all={};                
                 let key='id';
-                this.columns.all[key]={label: this.$systemFunctions.getLabel('label_id'),hideable:false};
+                this.columns.all[key]={
+                    label: this.$systemFunctions.getLabel('label_id'),
+                    hideable:false,
+                    filterable:true,
+                    filter:{type:'number',from:'',to:''}
+                    };
+                
                 key='name';
-                this.columns.all[key]={label: this.$systemFunctions.getLabel('label_name'),hideable:true};
+                this.columns.all[key]={
+                    label: this.$systemFunctions.getLabel('label_name'),
+                    hideable:true,
+                    filterable:true,
+                    filter:{type:'text',from:'',to:''}
+                    };
                 key='ordering';
-                this.columns.all[key]={label: this.$systemFunctions.getLabel('label_ordering'),hideable:true};
+                this.columns.all[key]={
+                    label: this.$systemFunctions.getLabel('label_ordering'),
+                    hideable:true,
+                    filterable:false                    
+                    };
                 key='status';
-                this.columns.all[key]={label: this.$systemFunctions.getLabel('label_status'),hideable:true};
+                this.columns.all[key]={
+                    label: this.$systemFunctions.getLabel('label_status'),
+                    hideable:true,
+                    filterable:true,
+                    filter:{type:'dropdown',from:'',to:'',options:[
+                        {value:this.$systemFunctions.dbStatus.ACTIVE,label:this.$systemFunctions.dbStatus.ACTIVE},
+                        {value:this.$systemFunctions.dbStatus.INACTIVE,label:this.$systemFunctions.dbStatus.INACTIVE},
+                    ]}
+                    };
+                key='created_at';
+                this.columns.all[key]={
+                    label: this.$systemFunctions.getLabel('label_created_time'),
+                    hideable:true,
+                    filterable:true,
+                    filter:{type:'date',from:'',to:''}
+                    };
             },  
             
             reloadItems(pagination){
@@ -138,7 +170,8 @@ import Details from './Details.vue'
                     .then(res => {
                         this.$systemFunctions.statusDataLoaded = 1;
                         if(res.data.error==''){
-                            this.items=res.data.items;                                                
+                            this.items=res.data.items;
+                            this.getFilteredItems();                                                
                         }
                         this.itemsLoaded=true;
                     }).catch(error => {                      
@@ -150,6 +183,9 @@ import Details from './Details.vue'
                         }                              
                     });
                 }                
+            }, 
+            getFilteredItems:function(){                
+                this.itemsFiltered=this.$systemFunctions.getFilteredItems(this.items.data,this.columns.all);
             },            
             addItem(){
                 this.$systemFunctions.validationErrors='';

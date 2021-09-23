@@ -24,6 +24,10 @@ export var labels={
         en:'Refresh',
         bn:'রিফ্রেশ'      
     },
+    button_reset:{
+        en:'Reset',
+        bn:'রিসেট'      
+    },
     button_refresh_page:{
         en:'Refresh page',
         bn:'পেইজ রিফ্রেশ করুন'

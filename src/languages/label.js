@@ -75,9 +75,25 @@ export var labels={
     label_showing:{
         en:"showing",
         bn:"দেখাচ্ছে"
-    },
-    
+    },    
     //pagination end
+    //Filter\
+    label_search:{
+        en:"Search",
+        bn:"অনুসন্ধান "
+    },
+    label_from:{
+        en:"From",
+        bn:"থেকে"
+    },      
+    label_to:{
+        en:"To",
+        bn:"পর্যন্ত"
+    },
+    //filter eed
+
+
+    //common
     label_created_time:{
         en:"Created Time",
         bn:"তৈরি সময়"
@@ -94,10 +110,7 @@ export var labels={
         en:"Description",
         bn:"ব্যাখ্যা"
     },
-    label_value:{
-        en:"Config Value",
-        bn:"ভ্যালু"
-    },
+    
     label_logout:{
         en:"Logout",
         bn:"লগআউট"
@@ -133,43 +146,7 @@ export var labels={
     label_name_bn:{
         en:"নাম",
         bn:"নাম"
-    },
-    label_prefix:{
-        en:"Prefix",
-        bn:'প্রিফিক্স'       
-    },
-    label_location:{
-        en:"Locations",
-        bn:'ঠিকানা'       
-    },
-    label_building:{
-        en:"Building",
-        bn:'বিল্ডিং'       
-    },
-    label_floor:{
-        en:"Floor",
-        bn:'ফ্লোর'       
-    },
-    label_room:{
-        en:"Room",
-        bn:'কক্ষ'       
-    },
-    label_asset_group:{
-        en:"Asset Group",
-        bn:'সম্পদ গ্রুপ'       
-    },
-    label_asset_category:{
-        en:"Asset Category",
-        bn:'সম্পদ বিভাগ'       
-    },
-    label_asset_sub_category:{
-        en:"Asset Sub Category",
-        bn:'সম্পদ উপ বিভাগ'       
-    },
-    label_department:{
-        en:"Department",
-        bn:'ডিপার্টমেন্ট'       
-    },
+    },    
     label_mobile_no:{
         en:"Mobile no.",
         bn:'মোবাইল নাম্বার'       
@@ -178,54 +155,12 @@ export var labels={
         en:"Email",
         bn:'ইমেইল'       
     },
-    label_code:{
-        en:"Code",
-        bn:'কোড'       
-    },
+    
     label_select:{
         en:"Select",
-        bn:'পছন্দ করুন'       
+        bn:'সিলেক্ট'       
     },
-    label_config_value:{
-        en:"Config Value",
-        bn:'ভ্যালু'       
-    },
-    label_employee:{
-        en:"Employee",
-        bn:'কর্মচারী'       
-    },
-    label_vendor:{
-        en:"Vendor",
-        bn:'ভেন্ডর'       
-    },
-    label_assigned_date:{
-        en:"Assigned Date",
-        bn:'বরাদ্দের তারিখ'       
-    },
-    label_price:{
-        en:"Price",
-        bn:'দাম'       
-    },
-    label_depreciation_rate:{
-        en:"Depreciation Rate",
-        bn:'অবচয় হার'       
-    },
-    label_purchase_date:{
-        en:"Purchase Date",
-        bn:'কেনার তারিখ'       
-    },
-    label_assign:{
-        en:"Assign now",
-        bn:'সম্পদ বরাদ্দ করুন'       
-    },
-    label_assign_info:{
-        en:"Assign Info",
-        bn:'সম্পদ বরাদ্দের তথ্য'       
-    },
-    label_not_assigned:{
-        en:"Not yet assigned",
-        bn:'এখনও বরাদ্দ করা হয়নি'       
-    },
+    //common end
     //unsed
     //header section
 

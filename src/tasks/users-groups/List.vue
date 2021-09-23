@@ -52,20 +52,21 @@
             <div class="card-header d-print-none">
                 {{$systemFunctions.getLabel('label_task')}}
             </div>
-            <div class="card-body" style='overflow-x:auto'>
+            <div class="card-body" style='overflow-x:auto;min-height:250px;'>
                 <table class="table table-bordered">
                     <thead class="table-active">
                         <tr>
                             <th class="cell-nowrap d-print-none">{{$systemFunctions.getLabel('label_action')}}</th>
                             <template v-for="(column,key) in $parent.columns.all">                                 
-                                <th v-if="$parent.columns.hidden.indexOf(key)>=0?false:true" :key="'th_'+key">     
-                                    {{ column.label }}
+                                <th v-if="$parent.columns.hidden.indexOf(key)>=0?false:true" :key="'th_'+key">                                    
+                                        {{ column.label }}
+                                        <ColumnFilter :column="column" :onChangeFilter="$parent.getFilteredItems" v-if="$parent.permissions.action_7 && column.filterable"/>                                    
                                 </th> 
                             </template>
                         </tr>
                     </thead>
                     <tbody class="table-striped table-hover">
-                        <tr v-for="item in getFilteredItems" :key="'item_'+item.id">
+                        <tr v-for="item in $parent.itemsFiltered" :key="'item_'+item.id">
                             <td class="col-1 d-print-none">
                                 <button class="btn btn-sm bg-gradient-primary dropdown-toggle waves-effect waves-light" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{$systemFunctions.getLabel('label_action')}}</button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
@@ -92,12 +93,13 @@
 <script>
 import ColumnControl from '@/components/ColumnControl.vue'
 import Pagination from '@/components/Pagination.vue';
-// import ValidationError from '@/components/ValidationError.vue';
+import ColumnFilter from '@/components/ColumnFilter.vue';
+
     export default {
         components: {
-            Pagination,
-            // ValidationError,
-            ColumnControl
+            Pagination,            
+            ColumnControl,
+            ColumnFilter,
         },
         data:function(){
             return{      
@@ -117,23 +119,11 @@ import Pagination from '@/components/Pagination.vue';
                 if(item_id>0){
                     this.$router.push('/'+this.$parent.base_url+'/details/'+item_id);
                 }                
-            }           
+            },         
+            
         },
         computed:{   
-            getFilteredItems:function(){
-                    let items=this.$parent.items;
-                    return items.data;
-                    //console.log(items.data);
-                    //return items.data;
-                    // return items.data.filter((item)=>{
-                    // // if(this.searchString){
-                    // //     if(item['name'].toLowerCase().indexOf(this.searchString.toLowerCase())==-1){
-                    // //         return false;
-                    // //     } 
-                    // // }
-                    // return true;
-                    // });
-            }, 
+            
         }
 
     }
