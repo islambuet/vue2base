@@ -42,11 +42,15 @@
                 <table class="table table-bordered">
                     <thead class="table-active">
                         <tr>
-                            <th class="cell-nowrap d-print-none">{{$systemFunctions.getLabel('label_action')}}</th>
+                            <th class="position-relative align-middle d-print-none">{{$systemFunctions.getLabel('label_action')}}</th>
                             <template v-for="(column,key) in $parent.columns.all">                                 
-                                <th v-if="$parent.columns.hidden.indexOf(key)>=0?false:true" :key="'th_'+key">                                    
-                                        {{ column.label }}
-                                        <ColumnFilter :column="column" :onChangeFilter="$parent.getFilteredItems" v-if="$parent.permissions.action_7 && column.filterable"/>                                    
+                                <th class="position-relative align-middle" v-if="$parent.columns.hidden.indexOf(key)>=0?false:true" :key="'th_'+key">
+                                        <ColumnSort :column="column" :position="'left:5px'"  :onChangeSort="$parent.getFilteredItems" v-if="$parent.permissions.action_7 && column.filterable"/>
+                                        <div class=" text-center " style="width:calc(100% - 33px);margin-left:17px">                                            
+                                            {{ column.label }}
+                                        </div>
+                                        <ColumnFilter :column="column" :position="'right:5px'"  :onChangeFilter="$parent.getFilteredItems" v-if="$parent.permissions.action_7 && column.filterable"/>
+                                    
                                 </th> 
                             </template>
                         </tr>
@@ -79,12 +83,14 @@
 import ColumnControl from '@/components/ColumnControl.vue'
 import Pagination from '@/components/Pagination.vue';
 import ColumnFilter from '@/components/ColumnFilter.vue';
+import ColumnSort from '@/components/ColumnSort.vue';
 
     export default {
         components: {
             Pagination,            
             ColumnControl,
             ColumnFilter,
+            ColumnSort
         },
         data:function(){
             return{      

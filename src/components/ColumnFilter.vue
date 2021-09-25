@@ -1,5 +1,5 @@
 <template>
-    <div class="btn-group d-print-none float-right ">
+    <div class="btn-group d-print-none position-absolute" :style="position" style="top: calc(50% - 8px)">
         <i type="button" class="feather icon-search" :class="getFilterClass" data-toggle="dropdown"></i>
         <div class="dropdown-menu dropdown-menu-right" onclick="event.stopPropagation()">
             <div class="dropdown-item p-1" v-if="column.filter.type=='number'">
@@ -41,6 +41,11 @@ export default {
         column: {
             type: Object,
             required: true
+        },
+        position: {
+            type: String,
+            default:'right:5px'
+            
         },
         onChangeFilter: {
             type: Function,
