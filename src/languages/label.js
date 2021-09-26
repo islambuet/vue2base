@@ -94,9 +94,14 @@ export var labels={
 
 
     //common
+    
     label_created_time:{
         en:"Created Time",
         bn:"তৈরি সময়"
+    },
+    label_created_by:{
+        en:"Created by(User Id)",
+        bn:"তৈরিকারী (ইউজার আইডি)"
     },
     label_created_date:{
         en:"Created Date",

@@ -11,6 +11,11 @@ export var labels={
         en:"Edit Module/task",
         bn:'Edit মডিউল/টাস্ক'       
     },
+    
+    label_details:{
+        en:"details of Module And task",
+        bn:'বিস্তারিত মডিউল এবং টাস্ক'       
+    },
     label_module_task_type:{
         en:"Type",
         bn:'টাইপ'       

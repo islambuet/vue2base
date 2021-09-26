@@ -26,8 +26,7 @@ import Details from './Details.vue'
                 item: {},           //single item
                 items: {data:[]},   //from Laravel server with pagination and info
                 itemsFiltered: [],    //for display
-                itemsLoaded:false,
-                modules_tasks:{},
+                itemsLoaded:false,                
                 columns:{all:{},hidden:[],sort:{key:'',dir:''}},
                 hidden_columns:[],
                 pagination: {current_page: 1,per_page_options: [10,20,50,100,500,1000],per_page:50,show_all_items:true},                
@@ -77,8 +76,7 @@ import Details from './Details.vue'
                 this.$systemFunctions.statusDataLoaded=0;                
                 this.$axios.get('/'+this.base_url+'/initialize')
                 .then(res=>{                    
-                    if(res.data.error==''){
-                        // this.setColumnCsv();                        
+                    if(res.data.error==''){                                              
                         this.permissions=res.data.permissions;
                         this.itemDefault=res.data.itemDefault;                        
                         this.columns.hidden=res.data.hidden_columns;

@@ -86,8 +86,7 @@ import Role from './Role.vue'
                 this.$systemFunctions.statusDataLoaded=0;                
                 this.$axios.get('/'+this.base_url+'/initialize')
                 .then(res=>{                    
-                    if(res.data.error==''){
-                        // this.setColumnCsv();                        
+                    if(res.data.error==''){                                             
                         this.permissions=res.data.permissions;
                         this.itemDefault=res.data.itemDefault;
                         this.modules_tasks=res.data.modules_tasks;
