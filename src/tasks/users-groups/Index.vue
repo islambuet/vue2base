@@ -31,7 +31,7 @@ import Role from './Role.vue'
                 itemsFiltered: [],    //for display
                 itemsLoaded:false,
                 modules_tasks:{},
-                columns:{all:{},hidden:[]},
+                 columns:{all:{},hidden:[],sort:{key:'',dir:''}},
                 hidden_columns:[],
                 pagination: {current_page: 1,per_page_options: [1,2,3,4,5,10,20,500,1000],per_page:2,show_all_items:true},
                 module_task_max_action:8,
@@ -81,6 +81,7 @@ import Role from './Role.vue'
                 }
             },
             init(){
+                this.setColumns();
                 this.$systemFunctions.statusTaskLoaded=0;
                 this.$systemFunctions.statusDataLoaded=0;                
                 this.$axios.get('/'+this.base_url+'/initialize')
@@ -90,8 +91,7 @@ import Role from './Role.vue'
                         this.permissions=res.data.permissions;
                         this.itemDefault=res.data.itemDefault;
                         this.modules_tasks=res.data.modules_tasks;
-                        this.columns.hidden=res.data.hidden_columns;
-                        this.setColumns();
+                        this.columns.hidden=res.data.hidden_columns;                        
                         this.$systemFunctions.statusTaskLoaded=1;
                         this.routing(this.$route);                        
                     }
@@ -106,51 +106,65 @@ import Role from './Role.vue'
                 });
             },
             setColumns(){
-                this.columns.all={};                
+                this.columns.all={};  
+                this.columns.sort={key:'',dir:''};                 
                 let key='id';
                 this.columns.all[key]={
                     label: this.$systemFunctions.getLabel('label_id'),
                     hideable:false,
                     filterable:true,
-                    filter:{type:'number',from:'',to:''}
-                    };
-                
+                    sortable:true,
+                    type:'number',
+                    filter:{from:'',to:''}
+                };                
                 key='name';
                 this.columns.all[key]={
                     label: this.$systemFunctions.getLabel('label_name'),
                     hideable:true,
                     filterable:true,
-                    filter:{type:'text',from:'',to:''}
-                    };
+                    sortable:true,
+                    type:'text',
+                    filter:{from:'',to:''}
+                };  
                 key='num_tasks';
                 this.columns.all[key]={
                     label: this.$systemFunctions.getLabel('label_num_tasks'),
                     hideable:true,
-                    filterable:false                    
+                    filterable:false,
+                    sortable:true,   
+                    type:'number',
+                    filter:{from:'',to:''}                    
                 };
                 key='ordering';
                 this.columns.all[key]={
                     label: this.$systemFunctions.getLabel('label_ordering'),
                     hideable:true,
-                    filterable:false                    
+                    filterable:false,
+                    sortable:true,   
+                    type:'number',
+                    filter:{from:'',to:''}                 
                 };
                 key='status';
                 this.columns.all[key]={
                     label: this.$systemFunctions.getLabel('label_status'),
                     hideable:true,
                     filterable:true,
-                    filter:{type:'dropdown',from:'',to:'',options:[
+                    sortable:true,
+                    type:'dropdown',
+                    filter:{from:'',to:'',options:[
                         {value:this.$systemFunctions.dbStatus.ACTIVE,label:this.$systemFunctions.dbStatus.ACTIVE},
                         {value:this.$systemFunctions.dbStatus.INACTIVE,label:this.$systemFunctions.dbStatus.INACTIVE},
                     ]}
-                    };
+                };
                 key='created_at';
                 this.columns.all[key]={
                     label: this.$systemFunctions.getLabel('label_created_time'),
                     hideable:true,
                     filterable:true,
-                    filter:{type:'date',from:'',to:''}
-                    };
+                    sortable:true,
+                    type:'date',
+                    filter:{from:'',to:''}
+                };
             },  
             
             reloadItems(pagination){
@@ -179,8 +193,8 @@ import Role from './Role.vue'
                     });
                 }                
             }, 
-            getFilteredItems:function(){ 
-                this.itemsFiltered=this.$systemFunctions.getFilteredItems(this.items.data,this.columns.all);
+            getFilteredItems:function(){                 
+                this.itemsFiltered=this.$systemFunctions.getFilteredItems(this.items.data,this.columns);
                 for(let i=0;i<this.itemsFiltered.length;i++){
                     this.itemsFiltered[i]['created_at']=this.$systemFunctions.displayTime(this.itemsFiltered[i]['created_at']);
                     this.itemsFiltered[i]['num_tasks']= this.itemsFiltered[i]['action_0'].split(",").length - 2;

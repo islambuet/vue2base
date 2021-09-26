@@ -42,11 +42,15 @@
                 <table class="table table-bordered">
                     <thead class="table-active">
                         <tr>
-                            <th class="cell-nowrap d-print-none">{{$systemFunctions.getLabel('label_action')}}</th>
+                            <th class="position-relative align-middle d-print-none">{{$systemFunctions.getLabel('label_action')}}</th>
                             <template v-for="(column,key) in $parent.columns.all">                                 
-                                <th v-if="$parent.columns.hidden.indexOf(key)>=0?false:true" :key="'th_'+key">                                    
-                                        {{ column.label }}
-                                        <ColumnFilter :column="column" :onChangeFilter="$parent.getFilteredItems" v-if="$parent.permissions.action_7 && column.filterable"/>                                    
+                                <th class="position-relative align-middle" v-if="$parent.columns.hidden.indexOf(key)>=0?false:true" :key="'th_'+key">
+                                        <ColumnSort :columns="$parent.columns" :sortKey="key" :position="'left:5px'"  :onChangeSort="$parent.getFilteredItems" v-if="$parent.permissions.action_7 && column.sortable"/>
+                                        <div class=" text-center " style="width:calc(100% - 33px);margin-left:17px">                                            
+                                            {{ column.label }}
+                                        </div>
+                                        <ColumnFilter :column="column" :position="'right:5px'"  :onChangeFilter="$parent.getFilteredItems" v-if="$parent.permissions.action_7 && column.filterable"/>
+                                    
                                 </th> 
                             </template>
                         </tr>
@@ -62,10 +66,7 @@
                                 </div>
                             </td>
                             <template v-for="(column,key) in $parent.columns.all">                         
-                                <td class="col-1" v-if="$parent.columns.hidden.indexOf(key)>=0?false:true" :key="'td_'+key">                        
-                                    <!-- <div v-if="key=='created_at'">{{$systemFunctions.displayTime(item[key]) }}</div>
-                                    <div v-else-if="key=='num_tasks'">{{item['action_0'].split(",").length - 2}}</div>
-                                    <div v-else>{{ item[key] }}</div> -->
+                                <td class="col-1" :class="(['id','num_tasks','ordering'].indexOf(key) != -1)?'text-right':''" v-if="$parent.columns.hidden.indexOf(key)>=0?false:true" :key="'td_'+key">                                                            
                                     {{ item[key] }}
                                 </td>     
                             </template>     
@@ -83,16 +84,17 @@
 import ColumnControl from '@/components/ColumnControl.vue'
 import Pagination from '@/components/Pagination.vue';
 import ColumnFilter from '@/components/ColumnFilter.vue';
+import ColumnSort from '@/components/ColumnSort.vue';
 
     export default {
         components: {
             Pagination,            
             ColumnControl,
             ColumnFilter,
+            ColumnSort
         },
         data:function(){
-            return{      
-                show_fitler_options:false,
+            return{                      
                 show_column_controls:false
             }
         },

@@ -65,7 +65,7 @@
                                 </div>
                             </td>
                             <template v-for="(column,key) in $parent.columns.all">                         
-                                <td class="col-1" v-if="$parent.columns.hidden.indexOf(key)>=0?false:true" :key="'td_'+key">                                                           
+                                <td class="col-1" :class="(['id','ordering'].indexOf(key) != -1)?'text-right':''" v-if="$parent.columns.hidden.indexOf(key)>=0?false:true" :key="'td_'+key">                                                           
                                     {{ item[key] }}
                                 </td>     
                             </template>     
@@ -93,8 +93,7 @@ import ColumnSort from '@/components/ColumnSort.vue';
             ColumnSort
         },
         data:function(){
-            return{      
-                show_fitler_options:false,
+            return{                      
                 show_column_controls:false
             }
         },

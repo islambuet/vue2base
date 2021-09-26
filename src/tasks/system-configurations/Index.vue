@@ -108,7 +108,7 @@ import Details from './Details.vue'
                     sortable:true,
                     type:'number',
                     filter:{from:'',to:''}
-                    };
+                };
                 
                 key='purpose';
                 this.columns.all[key]={
@@ -118,7 +118,7 @@ import Details from './Details.vue'
                     sortable:true,
                     type:'text',
                     filter:{from:'',to:''}
-                    };
+                };
                 key='config_value';
                 this.columns.all[key]={
                     label: this.$systemFunctions.getLabel('label_config_value'),
@@ -137,7 +137,7 @@ import Details from './Details.vue'
                         {value:this.$systemFunctions.dbStatus.ACTIVE,label:this.$systemFunctions.dbStatus.ACTIVE},
                         {value:this.$systemFunctions.dbStatus.INACTIVE,label:this.$systemFunctions.dbStatus.INACTIVE},
                     ]}
-                    };
+                };
                 key='created_at';
                 this.columns.all[key]={
                     label: this.$systemFunctions.getLabel('label_created_time'),
@@ -146,7 +146,7 @@ import Details from './Details.vue'
                     sortable:true,
                     type:'date',
                     filter:{from:'',to:''}
-                    };
+                };
             },  
             
             reloadItems(pagination){
