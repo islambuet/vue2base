@@ -10,40 +10,72 @@
         </div>  
         <div class="card d-print-none mb-2" v-if="'id' in $parent.item">
           <div class="card-header">
-            <div v-if="$parent.item.id>0">{{$systemFunctions.getLabel('label_edit')}} ::{{$parent.item['purpose']}}</div>
+            <div v-if="$parent.item.id>0">{{$systemFunctions.getLabel('label_edit')}} ::{{$parent.item['name_'+this.$systemFunctions.getLanguage()]}}</div>  
             <div v-else>{{$systemFunctions.getLabel('label_new')}}</div>
           </div>
           <div class="card-body col-md-8">
             <ValidationError/>
             <form id="formSaveItem">
               <input type="hidden" name="id" :value="$parent.item.id" />
-              <div class="row mb-2">
+              <div class="row mb-2" v-for="(language,i) in $systemFunctions.language_available" :key="'language_'+i">
                 <div class="col-4">
-                    <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_purpose')}}</label>
+                   <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_name_'+language)}} <span class="text-danger">*</span></label>
                 </div>
                 <div class="col-lg-4 col-8">
-                    <input type="text" class="form-control" name="item[purpose]" v-model="$parent.item.purpose" placeholder="purpose" required>
+                    <input type="text" class="form-control" :name="'item[name_'+language+']'" v-model="$parent.item['name_'+language]" required>
                 </div>
-              </div>          
+              </div>
               <div class="row mb-2">
                 <div class="col-4">
-                    <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_description')}}</label>
+                    <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_module_task_type')}} <span class="text-danger">*</span></label>
                 </div>
                 <div class="col-lg-4 col-8">
-                    <textarea class="form-control" name="item[description]" v-model="$parent.item.description"></textarea>
+                    <select class="form-control" name="item[type]" v-model="$parent.item.type" required>   
+                      <option value="">{{$systemFunctions.getLabel('label_select')}}</option>
+                      <option :value="type" v-for="type in $parent.module_task_types" :key="'type_'+type">{{type}}</option>
+                    </select>
                 </div>
-              </div>  
+              </div> 
               <div class="row mb-2">
                 <div class="col-4">
-                    <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_config_value')}}</label>
+                    <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_parent')}}</label>
                 </div>
                 <div class="col-lg-4 col-8">
-                    <textarea class="form-control" name="item[config_value]" v-model="$parent.item.config_value"></textarea>
+                  <select class="form-control" name="item[parent]" v-model="$parent.item.parent" required>      
+                    <option value="0">Main Menu</option>                              
+                    <option :value="parent.value" v-for="parent in getParents" :key="'parent_'+parent.value">{{parent.label}}</option>                      
+                  </select>
                 </div>
-              </div>                       
+              </div> 
               <div class="row mb-2">
                 <div class="col-4">
-                    <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_status')}}</label>
+                    <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_url')}}</label>
+                </div>
+                <div class="col-lg-4 col-8">
+                    <input type="text" class="form-control" name="item[url]" v-model="$parent.item.url"  required>
+                </div>
+              </div>
+              <div class="row mb-2">
+                <div class="col-4">
+                    <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_controller')}}</label>
+                </div>
+                <div class="col-lg-4 col-8">
+                    <input type="text" class="form-control" name="item[controller]" v-model="$parent.item.controller"  required>
+                </div>
+              </div>
+
+              <div class="row mb-2">
+                <div class="col-4">
+                    <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_ordering')}}</label>
+                </div>
+                <div class="col-lg-4 col-8">
+                    <input type="number" class="form-control integer_positive" name="item[ordering]" v-model="$parent.item.ordering" placeholder="Ordering" required>
+                </div>
+              </div> 
+
+              <div class="row mb-2">
+                <div class="col-4">
+                    <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_status')}} <span class="text-danger">*</span></label>
                 </div>
                 <div class="col-lg-4 col-8">
                   <select class="form-control" name="item[status]" v-model="$parent.item.status" required>                                    
@@ -69,6 +101,23 @@ export default {
   name: 'AddEdit',  
    components: {      
       ValidationError,
+  },
+  computed:{
+    getParents:function(){ 
+        let modules_tasks=this.$parent.modules_tasks;
+        let temp_items=[]; 
+        if(modules_tasks.tree){
+          for(let i=0;i<modules_tasks.tree.length;i++)
+          {
+              if(modules_tasks.tree[i].module_task.type!='TASK')
+              {
+                  temp_items.push({value:modules_tasks.tree[i].module_task.id,label:modules_tasks.tree[i].prefix+''+modules_tasks.tree[i].module_task['name_'+this.$systemFunctions.getLanguage()]});
+              }
+          }
+        } 
+         
+        return temp_items;
+    } 
   },
   methods:{
     save:function(save_and_new)

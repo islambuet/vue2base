@@ -28,6 +28,7 @@ import Details from './Details.vue'
                 itemsFiltered: [],    //for display
                 itemsLoaded:false,
                 modules_tasks:{},
+                module_task_types:[],
                 columns:{all:{},hidden:[],sort:{key:'',dir:''}},
                 hidden_columns:[],
             }
@@ -80,6 +81,7 @@ import Details from './Details.vue'
                         this.permissions=res.data.permissions;
                         this.itemDefault=res.data.itemDefault;                        
                         this.columns.hidden=res.data.hidden_columns;                        
+                        this.module_task_types=res.data.types;                        
                         this.$systemFunctions.statusTaskLoaded=1;
                         this.routing(this.$route);
                     }
