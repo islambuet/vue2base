@@ -2,17 +2,17 @@
     <div class="btn-group d-print-none position-absolute" :style="position" style="top: calc(50% - 8px)">
         <i type="button" class="feather icon-search" :class="getFilterClass" data-toggle="dropdown"></i>
         <div class="dropdown-menu dropdown-menu-right" onclick="event.stopPropagation()">
-            <div class="dropdown-item p-1" v-if="column.filter.type=='number'">
+            <div class="dropdown-item p-1" v-if="column.type=='number'">
                 <small>{{$systemFunctions.getLabel('label_from')}}</small>
                 <input type="number" class="form-control form-control-sm float_all" v-model="from" @input="column.filter.from=from;onChangeFilter()"> 
                 <small>{{$systemFunctions.getLabel('label_to')}}</small>
                 <input type="number" class="form-control form-control-sm float_all" v-model="to" @input="column.filter.to=to;onChangeFilter()">               
             </div>  
-            <div class="dropdown-item p-1" v-if="column.filter.type=='text'">
+            <div class="dropdown-item p-1" v-if="column.type=='text'">
                 <small>{{$systemFunctions.getLabel('label_search')}}</small>
                 <input type="text" class="form-control form-control-sm" v-model="from" @input="column.filter.from=from;onChangeFilter()"> 
             </div>          
-            <div class="dropdown-item p-1" v-if="column.filter.type=='dropdown'">  
+            <div class="dropdown-item p-1" v-if="column.type=='dropdown'">  
                 <select class="form-control form-control-sm"  v-model="from" @change="column.filter.from=from;onChangeFilter()">  
                     <option value="">{{$systemFunctions.getLabel('label_select')}}</option>
                     <option v-for="(option, i) in column.filter.options" :key="i" :value="option.value">
@@ -20,7 +20,7 @@
                       </option>                                  
                   </select>
             </div>      
-            <div class="dropdown-item p-1" v-if="column.filter.type=='date'">
+            <div class="dropdown-item p-1" v-if="column.type=='date'">
                 <small>{{$systemFunctions.getLabel('label_from')}}</small>
                 <input type="date" class="form-control form-control-sm" v-model="from" @input="column.filter.from=from;onChangeFilter()"> 
                 <small>{{$systemFunctions.getLabel('label_to')}}</small>

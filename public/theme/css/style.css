@@ -231,3 +231,10 @@ a:focus {
     background-color: #FF4500;
     border-color: #f06292;
 }
+.table-bordered{
+    border-color:#2f3642
+}
+.table-bordered td, .table-bordered th {
+    border-color:#2f3642;
+    border-bottom-color: #2f3642!important;
+}

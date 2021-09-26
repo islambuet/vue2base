@@ -1,7 +1,7 @@
 <template>
     <div class="d-print-none position-absolute" :style="position" style="top: calc(50% - 24px );">                                            
-        <div @click="onChangeSort()"><i type="button" class="bi bi-sort-up-alt text-primary mr-2"></i></div>
-        <div @click="onChangeSort()"><i type="button" class="bi bi-sort-down text-primary mr-2"></i></div>                                            
+        <div @click="sortClicked('asc')"><i type="button" class="bi bi-sort-up-alt text-primary mr-2" :class="ascActive"></i></div>
+        <div @click="sortClicked('desc')"><i type="button" class="bi bi-sort-down text-primary mr-2" :class="descActive"></i></div>                                            
     </div>
 </template>
 
@@ -9,8 +9,12 @@
 export default { 
     name: "ColumnSort",    
     props: {
-        column: {
+        columns: {
             type: Object,
+            required: true
+        },
+        sortKey: {
+            type: String,
             required: true
         },
         position: {
@@ -24,14 +28,29 @@ export default {
         },
     }, 
     data:function(){
-        return{      
-        
+        return{
+            // ascActive:'text-primary',
+            // descActive:'text-primary'
         }
-    },
-    created(){
         
+    },    
+    created(){        
     },
     computed: {
+        ascActive(){
+            if((this.columns.sort.key==this.sortKey)&&(this.columns.sort.dir=='asc')){
+                return 'text-danger';
+            }
+            return 'text-primary';
+
+        },
+        descActive(){
+            if((this.columns.sort.key==this.sortKey)&&(this.columns.sort.dir=='desc')){
+                return 'text-danger';
+            }
+            return 'text-primary';
+
+        },
         getFilterClass(){
             // if((this.from.length>0)||(this.to.length>0)){
             //         return 'text-danger';
@@ -40,12 +59,27 @@ export default {
         }
     },    
     methods:{
-        resetFilter(){            
-            // this.column.filter.from="";
-            // this.column.filter.to="";
-            // this.from='';
-            // this.to='';
-            // this.onChangeFilter();
+        sortClicked(dir){
+            if(this.columns.sort.key==this.sortKey)
+            {
+                if(dir==this.columns.sort.dir){
+                    this.columns.sort.key='';
+                    this.columns.sort.dir=''; 
+                }else{
+                    this.columns.sort.dir=dir; 
+                }
+
+            }
+            else{
+                this.columns.sort.key=this.sortKey;
+                this.columns.sort.dir=dir; 
+            }
+                                   
+            this.onChangeSort();
+        },
+        setDir(){
+            console.log("set Dir"+this.key);
+            console.log(this.columns.sort)
         }
     }
 };

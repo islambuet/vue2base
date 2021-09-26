@@ -45,7 +45,7 @@
                             <th class="position-relative align-middle d-print-none">{{$systemFunctions.getLabel('label_action')}}</th>
                             <template v-for="(column,key) in $parent.columns.all">                                 
                                 <th class="position-relative align-middle" v-if="$parent.columns.hidden.indexOf(key)>=0?false:true" :key="'th_'+key">
-                                        <ColumnSort :column="column" :position="'left:5px'"  :onChangeSort="$parent.getFilteredItems" v-if="$parent.permissions.action_7 && column.filterable"/>
+                                        <ColumnSort :columns="$parent.columns" :sortKey="key" :position="'left:5px'"  :onChangeSort="$parent.getFilteredItems" v-if="$parent.permissions.action_7 && column.sortable"/>
                                         <div class=" text-center " style="width:calc(100% - 33px);margin-left:17px">                                            
                                             {{ column.label }}
                                         </div>

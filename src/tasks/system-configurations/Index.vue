@@ -28,7 +28,7 @@ import Details from './Details.vue'
                 itemsFiltered: [],    //for display
                 itemsLoaded:false,
                 modules_tasks:{},
-                columns:{all:{},hidden:[]},
+                columns:{all:{},hidden:[],sort:{key:'',dir:''}},
                 hidden_columns:[],
                 pagination: {current_page: 1,per_page_options: [10,20,50,100,500,1000],per_page:50,show_all_items:true},                
             }
@@ -72,6 +72,7 @@ import Details from './Details.vue'
                 }                
             },
             init(){
+                this.setColumns();
                 this.$systemFunctions.statusTaskLoaded=0;
                 this.$systemFunctions.statusDataLoaded=0;                
                 this.$axios.get('/'+this.base_url+'/initialize')
@@ -81,7 +82,7 @@ import Details from './Details.vue'
                         this.permissions=res.data.permissions;
                         this.itemDefault=res.data.itemDefault;                        
                         this.columns.hidden=res.data.hidden_columns;
-                        this.setColumns();
+                        
                         this.$systemFunctions.statusTaskLoaded=1;
                         this.routing(this.$route);                        
                     }
@@ -97,13 +98,16 @@ import Details from './Details.vue'
                 });
             },
             setColumns(){
-                this.columns.all={};                
+                this.columns.all={}; 
+                this.columns.sort={key:'',dir:''};              
                 let key='id';
                 this.columns.all[key]={
                     label: this.$systemFunctions.getLabel('label_id'),
                     hideable:false,
                     filterable:true,
-                    filter:{type:'number',from:'',to:''}
+                    sortable:true,
+                    type:'number',
+                    filter:{from:'',to:''}
                     };
                 
                 key='purpose';
@@ -111,12 +115,15 @@ import Details from './Details.vue'
                     label: this.$systemFunctions.getLabel('label_purpose'),
                     hideable:true,
                     filterable:true,
-                    filter:{type:'text',from:'',to:''}
+                    sortable:true,
+                    type:'text',
+                    filter:{from:'',to:''}
                     };
                 key='config_value';
                 this.columns.all[key]={
                     label: this.$systemFunctions.getLabel('label_config_value'),
                     hideable:true,
+                    sortable:true,
                     filterable:false                    
                 };                
                 key='status';
@@ -124,7 +131,9 @@ import Details from './Details.vue'
                     label: this.$systemFunctions.getLabel('label_status'),
                     hideable:true,
                     filterable:true,
-                    filter:{type:'dropdown',from:'',to:'',options:[
+                    sortable:true,
+                    type:'dropdown',
+                    filter:{from:'',to:'',options:[
                         {value:this.$systemFunctions.dbStatus.ACTIVE,label:this.$systemFunctions.dbStatus.ACTIVE},
                         {value:this.$systemFunctions.dbStatus.INACTIVE,label:this.$systemFunctions.dbStatus.INACTIVE},
                     ]}
@@ -134,7 +143,9 @@ import Details from './Details.vue'
                     label: this.$systemFunctions.getLabel('label_created_time'),
                     hideable:true,
                     filterable:true,
-                    filter:{type:'date',from:'',to:''}
+                    sortable:true,
+                    type:'date',
+                    filter:{from:'',to:''}
                     };
             },  
             
@@ -154,7 +165,8 @@ import Details from './Details.vue'
                             this.getFilteredItems();                                                
                         }
                         this.itemsLoaded=true;
-                    }).catch(error => {                      
+                    }).catch(error => {   
+                        console.log(error);                   
                         this.$systemFunctions.statusDataLoaded = 1;
                         if (error.response && error.response.data && error.response.data.error) {
                             this.$systemFunctions.showResponseError(error.response.data);            
@@ -165,7 +177,7 @@ import Details from './Details.vue'
                 }                
             }, 
             getFilteredItems:function(){ 
-                this.itemsFiltered=this.$systemFunctions.getFilteredItems(this.items.data,this.columns.all);
+                this.itemsFiltered=this.$systemFunctions.getFilteredItems(this.items.data,this.columns);
                 for(let i=0;i<this.itemsFiltered.length;i++){
                     this.itemsFiltered[i]['created_at']=this.$systemFunctions.displayTime(this.itemsFiltered[i]['created_at']);                    
                 }               

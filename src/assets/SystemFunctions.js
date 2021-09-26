@@ -160,12 +160,12 @@ var systemFunctions = new Vue({
 
         },
         getFilteredItems(datas,columns){
-            return datas.filter((item)=>{
-                for(let  key in columns)
+            let filterItems= datas.filter((item)=>{
+                for(let  key in columns.all)
                 {
-                    let column = columns[key];
+                    let column = columns.all[key];
                     if(column.filterable){
-                        if(column.filter.type=='number'){
+                        if(column.type=='number'){
                             if(column.filter.from.length>0){
                                 if(parseFloat(item[key])<parseFloat(column.filter.from))
                                 {                        
@@ -179,7 +179,7 @@ var systemFunctions = new Vue({
                                 }
                             }
                         }
-                        else if(column.filter.type=='text'){
+                        else if(column.type=='text'){
                             if(column.filter.from.length>0){
                                 if(item[key].toLowerCase().indexOf(column.filter.from.toLowerCase())==-1)
                                 {
@@ -187,7 +187,7 @@ var systemFunctions = new Vue({
                                 }
                             }
                         }
-                        else if(column.filter.type=='dropdown'){
+                        else if(column.type=='dropdown'){
                             if(column.filter.from.length>0){
                                 if(item[key]!=column.filter.from)
                                 {                         
@@ -195,7 +195,7 @@ var systemFunctions = new Vue({
                                 } 
                             }
                         }
-                        else if(column.filter.type=='date'){
+                        else if(column.type=='date'){
                             if(column.filter.from.length>0){                               
                                 if(new Date(item[key])<new Date(column.filter.from+" 00:00:00"))
                                 {                        
@@ -213,6 +213,28 @@ var systemFunctions = new Vue({
                 }
                 return true;
             });
+            let key=columns.sort.key;
+            let dir=columns.sort.dir;
+            if(key!='' ){
+                if((key in columns.all) &&((dir=='asc')||(dir=='desc')))
+                {
+                    if(columns.all[key].type=='number')
+                    {
+                        filterItems.sort((a,b)=> (a[key] > b[key] ? 1: -1 ));
+                    }
+                    else if(columns.all[key].type=='date')
+                    {
+                        filterItems.sort((a,b)=> (new Date(a[key]) > new Date(b[key]) ? 1 : -1));
+                    }
+                    else{
+                        filterItems.sort((a,b)=> (a[key].localeCompare(b[key])));                                           
+                    }
+                    if(dir=='desc'){
+                        filterItems.reverse();
+                    }
+                }
+            }
+            return filterItems;
         },
         exportCsv(columns,datas,filename="output.csv")
         {
