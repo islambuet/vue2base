@@ -33,7 +33,7 @@ import Role from './Role.vue'
                 modules_tasks:{},
                  columns:{all:{},hidden:[],sort:{key:'',dir:''}},
                 hidden_columns:[],
-                pagination: {current_page: 1,per_page_options: [1,2,3,4,5,10,20,500,1000],per_page:2,show_all_items:true},
+                pagination: {current_page: 1,per_page_options: [5,10,20,500,1000],per_page:20,show_all_items:true},
                 module_task_max_action:8,
             }
         },

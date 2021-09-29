@@ -19,7 +19,7 @@ import Details from './Details.vue'
 
         data (){
             return {
-                base_url:'system-configurations',
+                base_url:'users-types',
                 method:'list',        
                 permissions:{},
                 itemDefault: {},                
@@ -108,23 +108,23 @@ import Details from './Details.vue'
                     filter:{from:'',to:''}
                 };
                 
-                key='purpose';
+                key='name';
                 this.columns.all[key]={
-                    label: this.$systemFunctions.getLabel('label_purpose'),
+                    label: this.$systemFunctions.getLabel('label_name'),
                     hideable:true,
                     filterable:true,
                     sortable:true,
                     type:'text',
                     filter:{from:'',to:''}
                 };
-                key='config_value';
+                key='prefix';
                 this.columns.all[key]={
-                    label: this.$systemFunctions.getLabel('label_config_value'),
+                    label: this.$systemFunctions.getLabel('label_prefix'),
                     hideable:true,
                     sortable:true,
                     filterable:false,
                     type:'text',
-                    filter:{from:'',to:''}                  
+                    filter:{from:'',to:''}                   
                 };                
                 key='status';
                 this.columns.all[key]={

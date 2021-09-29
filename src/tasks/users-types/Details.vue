@@ -7,33 +7,25 @@
         </div>  
         <div class="card d-print-none mb-2" v-if="'id' in $parent.item">
           <div class="card-header">
-            <div >{{$systemFunctions.getLabel('label_details')}} ::{{$parent.item['purpose']}}</div>            
+            <div >{{$systemFunctions.getLabel('label_details')}} ::{{$parent.item['name']}}</div>            
           </div>
           <div class="card-body col-md-8">
               <div class="row mb-2">
                 <div class="col-4">
-                    <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_purpose')}}</label>
+                    <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_name')}}</label>
                 </div>
                 <div class="col-lg-4 col-8">
-                    {{$parent.item.purpose}}                    
+                    {{$parent.item.name}}                    
                 </div>
               </div>          
               <div class="row mb-2">
                 <div class="col-4">
-                    <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_description')}}</label>
+                    <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_prefix')}}</label>
                 </div>
                 <div class="col-lg-4 col-8">
-                    {{$parent.item.description}}                    
+                    {{$parent.item.prefix}}                    
                 </div>
-              </div>          
-              <div class="row mb-2">
-                <div class="col-4">
-                    <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_config_value')}}</label>
-                </div>
-                <div class="col-lg-4 col-8">
-                    {{$parent.item.config_value}} 
-                </div>
-              </div> 
+              </div>                        
               <div class="row mb-2">
                 <div class="col-4">
                     <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_status')}}</label>
