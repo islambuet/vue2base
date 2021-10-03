@@ -11,6 +11,10 @@ export var labels={
         en:'This user Not Found.', 
         bn:'এই ইউজার পাওয়া যায়নি।'
     },
+    DATA_ALREADY_SAVED:{
+        en:'This Data already Saved.\nPlease Relaod your website or Go back', 
+        bn:'এই ডেটা ইতিমধ্যেই সংরক্ষিত হয়েছে।\nঅনুগ্রহ করে আপনার ওয়েবসাইট পুনরায় লোড করুন অথবা পেছনে যান '
+    },
 
     // ------- UNUSED--------------
 

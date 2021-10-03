@@ -42,7 +42,8 @@ function initialData() {
         statusTaskLoaded: 0,    //Loading=0,success=1,failed=-1,acceesdenied=-2, site_off_line = -3  for all page
         statusDataLoaded: 1,    //Loading=0,loaed=1    
         validationErrors:'',
-        showJumpActions:true, 
+        showJumpActions:true, //for displaying direct edit or details
+        loadListData:true,//For Reloading List view data
         dbStatus:{'YES':'Yes','NO':'No','ACTIVE':'Active','INACTIVE':'In-Active','DELETE':'Deleted'}
     }
 }
@@ -116,6 +117,10 @@ var systemFunctions = new Vue({
                 } else{
                     console.log(data.errorMessage);
                 }
+            }
+            else if (data.error == 'DATA_ALREADY_SAVED') {
+                this.$toast.error(this.getLabel('DATA_ALREADY_SAVED'));
+                this.loadListData=true;
             }
             else {
                 this.$toast.error(this.getLabel(data.errorMessage));
