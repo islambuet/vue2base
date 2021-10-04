@@ -10,48 +10,104 @@
         </div>  
         <div class="card d-print-none mb-2" v-if="'id' in $parent.item">
           <div class="card-header">
-            <div v-if="$parent.item.id>0">{{$systemFunctions.getLabel('label_edit')}} ::{{$parent.item['name']}}</div>
-            <div v-else>{{$systemFunctions.getLabel('label_new')}}</div>
+            <div>{{$systemFunctions.getLabel('label_edit')}} ::{{$parent.item['name_'+this.$systemFunctions.getLanguage()]}}</div>            
           </div>
           <div class="card-body col-md-8">
             <ValidationError/>
             <form id="formSaveItem">
               <input type="hidden" name="id" :value="$parent.item.id" />
-              <div class="row mb-2">
-                <div class="col-4">
-                    <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_name')}}</label>
+              <input type="hidden" name="save_token" :value="$systemFunctions.user.id+'_'+new Date().getTime()" />
+              <div id="accordion">
+                <div class="card">
+                    <div class="card-header p-1">
+                        <a class="btn btn-sm" data-toggle="collapse" href="#title_identification">{{$systemFunctions.getLabel('label_title_identification')}} </a>
+                    </div>
+                    <div id="title_identification" class="collapse show">
+                        <div class="card-body">
+                            <div class="row mb-2" v-for="(language,i) in $systemFunctions.language_available" :key="'language_'+i">
+                              <div class="col-4">
+                                <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_name_'+language)}} <span class="text-danger">*</span></label>
+                              </div>
+                              <div class="col-lg-4 col-8">
+                                  <input type="text" class="form-control" :name="'item[name_'+language+']'" v-model="$parent.item['name_'+language]" required>
+                              </div>
+                            </div>
+                            <div class="row mb-2">
+                              <div class="col-4">
+                                  <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_user_group_name')}} <span class="text-danger">*</span></label>
+                              </div>
+                              <div class="col-lg-4 col-8">
+                                <select class="form-control" name="item[user_group_id]"  v-model="$parent.item.user_group_id">  
+                                  <option value="">{{$systemFunctions.getLabel('label_select')}}</option>
+                                  <option v-for="(option, i) in $parent.users_groups" :key="'ug_'+i" :value="option.id">
+                                    {{ option.name }}
+                                  </option>                                  
+                                </select>                                   
+                              </div>
+                            </div> 
+                            <div class="row mb-2">
+                              <div class="col-4">
+                                  <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_email')}}</label>
+                              </div>
+                              <div class="col-lg-4 col-8">
+                                <input type="text" class="form-control" name="item[email]" v-model="$parent.item.email">                    
+                              </div>
+                            </div>  
+                            <div class="row mb-2">
+                              <div class="col-4">
+                                  <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_mobile_no')}}</label>
+                              </div>
+                              <div class="col-lg-4 col-8">
+                                <input type="text" class="form-control" name="item[mobile_no]" v-model="$parent.item.mobile_no" required>     
+                              </div>
+                            </div> 
+                        </div>
+                    </div>
                 </div>
-                <div class="col-lg-4 col-8">
-                    <input type="text" class="form-control" name="item[name]" v-model="$parent.item.name" required>
+                <div class="card">
+                    <div class="card-header p-1">
+                        <a class="btn btn-sm" data-toggle="collapse" href="#title_authentication">{{$systemFunctions.getLabel('label_title_authentication')}} </a>
+                    </div>
+                    <div id="title_authentication" class="collapse show">
+                        <div class="card-body">
+                            <div class="row mb-2">
+                              <div class="col-4">
+                                  <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_username')}} <span class="text-danger">*</span></label>
+                              </div>
+                              <div class="col-lg-4 col-8">
+                                  <input type="text" class="form-control" name="item[username]" v-model="$parent.item.username" required>
+                              </div>
+                            </div>  
+                            <div class="row mb-2">
+                              <div class="col-4">
+                                  <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_password')}}</label>
+                              </div>
+                              <div class="col-lg-4 col-8">
+                                <div class="input-group">
+                                  <div class="input-group-prepend eye_password">
+                                    <span class="input-group-text" ><i class="feather icon-eye"></i></span>
+                                  </div>
+                                  <input type="text" class="form-control" name="item[password]">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row mb-2">
+                              <div class="col-4">
+                                  <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_status')}}</label>
+                              </div>
+                              <div class="col-lg-4 col-8">
+                                <select class="form-control" name="item[status]" v-model="$parent.item.status" required>                                    
+                                  <option :value="$systemFunctions.dbStatus.ACTIVE">{{$systemFunctions.dbStatus.ACTIVE}}</option>
+                                  <option :value="$systemFunctions.dbStatus.INACTIVE">{{$systemFunctions.dbStatus.INACTIVE}}</option>                      
+                                </select>
+                              </div>
+                            </div> 
+                        </div>
+                    </div>
                 </div>
-              </div>          
-              <div class="row mb-2">
-                <div class="col-4">
-                    <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_prefix')}}</label>
-                </div>
-                <div class="col-lg-4 col-8">
-                  <input type="text" class="form-control" name="item[prefix]" v-model="$parent.item.prefix" required>                    
-                </div>
-              </div>  
-              <div class="row mb-2">
-                <div class="col-4">
-                    <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_ordering')}}</label>
-                </div>
-                <div class="col-lg-4 col-8">
-                  <input type="text" class="form-control" name="item[ordering]" v-model="$parent.item.ordering" required>     
-                </div>
-              </div>                       
-              <div class="row mb-2">
-                <div class="col-4">
-                    <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_status')}}</label>
-                </div>
-                <div class="col-lg-4 col-8">
-                  <select class="form-control" name="item[status]" v-model="$parent.item.status" required>                                    
-                    <option :value="$systemFunctions.dbStatus.ACTIVE">{{$systemFunctions.dbStatus.ACTIVE}}</option>
-                    <option :value="$systemFunctions.dbStatus.INACTIVE">{{$systemFunctions.dbStatus.INACTIVE}}</option>                      
-                  </select>
-                </div>
-              </div>      
+              </div>
+                                 
+                   
             </form>
           </div>          
         </div>  
@@ -79,7 +135,7 @@ export default {
           this.$systemFunctions.statusDataLoaded = 1;
           if(res.data.error==''){
               this.$systemFunctions.showSuccessMessage(this.$systemFunctions.getLabel('msg_success_saved'));
-              this.$parent.itemsLoaded=false;
+              this.$systemFunctions.loadListData=true;
               if(save_and_new){
                 if(this.$route.path=='/'+this.$parent.base_url+'/add'){
                 this.$parent.addItem();

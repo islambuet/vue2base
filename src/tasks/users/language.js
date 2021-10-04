@@ -23,4 +23,12 @@ export var labels={
         en:"User Type",
         bn:"ব্যবহারকারী ধরন"
     }, 
+    label_title_authentication :{
+        en:"Username,Password, Status",
+        bn:"ইউজারনেম, পাসওয়ার্ড, স্ট্যাটাস"
+    }, 
+    label_title_identification :{
+        en:"Personal Information",
+        bn:"ব্যক্তিগত তথ্য"
+    }, 
 }

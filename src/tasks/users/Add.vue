@@ -42,7 +42,7 @@
                     <div class="input-group-prepend eye_password">
                       <span class="input-group-text" ><i class="feather icon-eye"></i></span>
                     </div>
-                    <input type="text" class="form-control" name="item[password]" v-model="$parent.item.password" required>
+                    <input type="text" class="form-control" name="item[password]" required>
                   </div>
                 </div>
               </div>

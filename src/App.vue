@@ -27,7 +27,8 @@ export default {
   },
   created() {
     //this.$axios.defaults.baseURL = 'http://127.0.0.1:8085/api';    
-    //this.$axios.defaults.baseURL = this.$systemFunctions.baseUrl+'../apivue2base/public/api/';//enable for final build
+    //this.$axios.defaults.baseURL = this.$systemFunctions.baseUrl+'../apivue2base/public/api/';//enable for final build at paralel folder and additional folder
+    //this.$axios.defaults.baseURL = this.$systemFunctions.baseUrl+'apivue2base/public/api/';//enable for final build at subfolder
     this.$axios.defaults.baseURL = 'http://127.0.0.1/base/apivue2base/public/api/';
     this.$axios.defaults.headers.common['language'] = this.$systemFunctions.language;
     this.$axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.$systemFunctions.user.authToken;

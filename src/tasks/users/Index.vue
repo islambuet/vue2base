@@ -31,7 +31,7 @@ import Details from './Details.vue'
                 itemsFiltered: [],    //for display                                
                 columns:{all:{},hidden:[],sort:{key:'',dir:''}},
                 hidden_columns:[],
-                pagination: {current_page: 1,per_page_options: [10,20,50,100,500,1000],per_page:50,show_all_items:true},                
+                pagination: {current_page: 1,per_page_options: [10,20,50,100,500,1000],per_page:5,show_all_items:true},                
                 users_groups:[],
                 users_types:[],
             }
