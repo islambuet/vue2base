@@ -41,7 +41,7 @@
             </a>
             <div class="dropdown-menu dropdown-menu-right">
                 <div class="dropdown-item">
-                    <h6 class="text-overflow m-0">{{$systemFunctions.getLabel('label_welcome')}} {{ $systemFunctions.language == 'en' ? $systemFunctions.user.name_en : $systemFunctions.user.name_bn }}</h6>
+                    <h6 class="text-overflow m-0">{{$systemFunctions.getLabel('label_welcome')}} {{$systemFunctions.user.name}}</h6>
                 </div>
                 <!-- item-->                
                 <a href="#" class="system_ajax dropdown-item"><i class="icon-mid bi bi-person-square me-2"></i> Profile Picture</a>

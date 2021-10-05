@@ -130,7 +130,15 @@ var systemFunctions = new Vue({
         setUser: function (data) {
             // data == object {token_auth: 'value'}, ...
             for (var item_key in data) {
-                this.user[item_key] = data[item_key];
+                if(item_key=='name'){
+                    let name=JSON.parse(data[item_key]);
+                    let lang=this.getLanguage();
+                    this.user[item_key] = name[lang]?name[lang]:'';;
+                }
+                else{
+                    this.user[item_key] = data[item_key];
+                }
+                
             }
         },
         logout() {

@@ -13,7 +13,7 @@
             <div>{{$systemFunctions.getLabel('label_new')}}</div>
           </div>
           <div class="card-body col-md-8">
-            <ValidationError/>
+            <ValidationError/>            
             <form id="formSaveItem">
               <input type="hidden" name="id" :value="$parent.item.id" />
               <input type="hidden" name="save_token" :value="$systemFunctions.user.id+'_'+new Date().getTime()" />
@@ -22,7 +22,7 @@
                    <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_name_'+language)}} <span class="text-danger">*</span></label>
                 </div>
                 <div class="col-lg-4 col-8">
-                    <input type="text" class="form-control" :name="'item[name_'+language+']'" v-model="$parent.item['name_'+language]" required>
+                    <input type="text" class="form-control" :name="'item[name]['+language+']'" v-model="$parent.item['name_'+language]" required>
                 </div>
               </div>              
               <div class="row mb-2">
@@ -103,7 +103,7 @@ export default {
   name: 'AddEdit',  
    components: {      
       ValidationError,
-  },    
+  },      
   methods:{
     save:function(save_and_new)
     { 

@@ -31,7 +31,7 @@ import Details from './Details.vue'
                 itemsFiltered: [],    //for display                                
                 columns:{all:{},hidden:[],sort:{key:'',dir:''}},
                 hidden_columns:[],
-                pagination: {current_page: 1,per_page_options: [10,20,50,100,500,1000],per_page:5,show_all_items:true},                
+                pagination: {current_page: 1,per_page_options: [10,20,50,100,500,1000],per_page:100,show_all_items:true},                
                 users_groups:[],
                 users_types:[],
             }
@@ -213,12 +213,21 @@ import Details from './Details.vue'
                 }                
             }, 
             getFilteredItems:function(){ 
-                this.itemsFiltered=this.$systemFunctions.getFilteredItems(this.items.data,this.columns);
+                let items=this.items.data;
+                for(let i=0;i<items.length;i++){
+                    let name=JSON.parse(items[i]['name']);
+                    for(let index=0;index<this.$systemFunctions.language_available.length;index++)
+                    {
+                        let lang=this.$systemFunctions.language_available[index];
+                        items[i]['name_'+lang]=name[lang]?name[lang]:'';
+                    }
+                }
+                this.itemsFiltered=this.$systemFunctions.getFilteredItems(items,this.columns);
                 for(let i=0;i<this.itemsFiltered.length;i++){
                     this.itemsFiltered[i]['created_at']=this.$systemFunctions.displayTime(this.itemsFiltered[i]['created_at']);                    
                 }               
             },            
-            addItem(){
+            addItem(){                
                 this.$systemFunctions.validationErrors='';
                 if(!(this.permissions.action_1))
                 {
@@ -227,7 +236,12 @@ import Details from './Details.vue'
                 else
                 { 
                     this.item={};
-                    Object.assign(this.item, this.itemDefault);           
+                    Object.assign(this.item, this.itemDefault);  
+                    for(let index=0;index<this.$systemFunctions.language_available.length;index++)
+                    {
+                        let lang=this.$systemFunctions.language_available[index];
+                        this.item['name_'+lang]='';;
+                    }         
                 }
             },
             setItemByItemId(item_id){
@@ -237,6 +251,7 @@ import Details from './Details.vue'
                 for(let i=0;i<items.length;i++){
                     if(items[i].id==item_id){
                         Object.assign(this.item, items[i]);
+                        //name according to language already set
                     }                        
                 }                    
                 //Live Search request
@@ -247,7 +262,14 @@ import Details from './Details.vue'
                         this.$systemFunctions.statusDataLoaded = 1;
                         if(res.data.error==''){
                             this.item={};
-                            this.item=res.data.item;                     
+                            this.item=res.data.item;  
+                            let name=JSON.parse(this.item['name']);
+                            for(let index=0;index<this.$systemFunctions.language_available.length;index++)
+                            {
+                                let lang=this.$systemFunctions.language_available[index];
+                                this.item['name_'+lang]=name[lang]?name[lang]:'';
+                            }
+
                         }
                     }).catch(error => {   
                         this.$systemFunctions.statusDataLoaded = 1;
