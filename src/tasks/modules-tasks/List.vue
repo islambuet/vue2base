@@ -10,7 +10,7 @@
                 <button type="button" v-if="$parent.permissions.action_5" class="mr-2 mb-2 btn btn-sm bg-gradient-primary" onclick="window.print();"><i class="feather icon-printer"></i> {{$systemFunctions.getLabel('action_5')}}</button>
                 <button type="button" v-if="$parent.permissions.action_6" class="mr-2 mb-2 btn btn-sm bg-gradient-primary" @click="$systemFunctions.exportCsv($parent.columns,$parent.itemsFiltered,$parent.base_url+'.csv')"><i class="feather icon-download"></i> {{$systemFunctions.getLabel('action_6')}}</button>
                 
-                <button type="button" v-if="$parent.permissions.action_0" class="mr-2 mb-2 btn btn-sm bg-gradient-primary" @click="$parent.itemsLoaded=false;$parent.init()"><i class="feather icon-rotate-cw"></i> {{$systemFunctions.getLabel('button_refresh')}}</button>
+                <button type="button" v-if="$parent.permissions.action_0" class="mr-2 mb-2 btn btn-sm bg-gradient-primary" @click="$systemFunctions.loadListData=true;$parent.init()"><i class="feather icon-rotate-cw"></i> {{$systemFunctions.getLabel('button_refresh')}}</button>
             </div>
         </div>            
         <div class="card mb-2">

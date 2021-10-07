@@ -17,12 +17,13 @@
             <ValidationError/>
             <form id="formSaveItem">
               <input type="hidden" name="id" :value="$parent.item.id" />
+              <input type="hidden" name="save_token" :value="$systemFunctions.user.id+'_'+new Date().getTime()" />
               <div class="row mb-2" v-for="(language,i) in $systemFunctions.language_available" :key="'language_'+i">
                 <div class="col-4">
                    <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_name_'+language)}} <span class="text-danger">*</span></label>
                 </div>
                 <div class="col-lg-4 col-8">
-                    <input type="text" class="form-control" :name="'item[name_'+language+']'" v-model="$parent.item['name_'+language]" required>
+                    <input type="text" class="form-control" :name="'item[name]['+language+']'" v-model="$parent.item['name_'+language]" required>
                 </div>
               </div>
               <div class="row mb-2">
@@ -111,7 +112,9 @@ export default {
           {
               if(modules_tasks.tree[i].module_task.type!='TASK')
               {
-                  temp_items.push({value:modules_tasks.tree[i].module_task.id,label:modules_tasks.tree[i].prefix+''+modules_tasks.tree[i].module_task['name_'+this.$systemFunctions.getLanguage()]});
+                let name=JSON.parse(modules_tasks.tree[i].module_task['name']);
+                let name_label=modules_tasks.tree[i].prefix+''+(name[this.$systemFunctions.getLanguage()]?name[this.$systemFunctions.getLanguage()]:'');
+                temp_items.push({value:modules_tasks.tree[i].module_task.id,label:name_label});
               }
           }
         } 
@@ -128,7 +131,7 @@ export default {
           this.$systemFunctions.statusDataLoaded = 1;
           if(res.data.error==''){
               this.$systemFunctions.showSuccessMessage(this.$systemFunctions.getLabel('msg_success_saved'));
-              this.$parent.itemsLoaded=false;
+              this.$systemFunctions.loadListData=true;
               if(save_and_new){
                 if(this.$route.path=='/'+this.$parent.base_url+'/add'){
                 this.$parent.addItem();

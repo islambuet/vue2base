@@ -25,12 +25,11 @@ import Details from './Details.vue'
                 itemDefault: {},                
                 item: {},           //single item
                 items: {data:[]},   //from Laravel server with pagination and info
-                itemsFiltered: [],    //for display
-                itemsLoaded:false,
+                itemsFiltered: [],    //for display  
+                columns:{all:{},hidden:[],sort:{key:'',dir:''}},
+                hidden_columns:[],              
                 modules_tasks:{},
                 module_task_types:[],
-                columns:{all:{},hidden:[],sort:{key:'',dir:''}},
-                hidden_columns:[],
             }
         },
         created(){    
@@ -40,6 +39,7 @@ import Details from './Details.vue'
             this.$systemFunctions.loadLanguageFiles([
                 {language:this.$systemFunctions.getLanguage(),file:'tasks/'+this.base_url+'/language.js'},
             ]);
+            this.$systemFunctions.loadListData=true;
             this.init();
         },
         watch: {
@@ -173,11 +173,11 @@ import Details from './Details.vue'
             },  
             
             reloadItems(){
-                this.itemsLoaded=false;
+                this.$systemFunctions.loadListData=true;
                 this.getItems();
             },       
             getItems(){                
-                if(!this.itemsLoaded)
+                if(this.$systemFunctions.loadListData)
                 {
                     this.$systemFunctions.statusDataLoaded=0;
                     this.$axios.get('/'+this.base_url+'/get-items')
@@ -188,7 +188,7 @@ import Details from './Details.vue'
                             this.setColumns();
                             this.getFilteredItems();                             
                         }
-                        this.itemsLoaded=true;
+                        this.$systemFunctions.loadListData=false;
                     }).catch(error => {   
                         console.log(error);                   
                         this.$systemFunctions.statusDataLoaded = 1;
@@ -206,12 +206,23 @@ import Details from './Details.vue'
                 {                    
                     var item={};
                     Object.assign(item, this.modules_tasks.tree[i].module_task);
-                    item['name_0']=this.modules_tasks.tree[i].module_task['name_'+((this.$systemFunctions.language=='en')?'bn':'en')]; 
+                    let name=JSON.parse(item['name']);
+                    delete item['name'];
+                    for(let index=0;index<this.$systemFunctions.language_available.length;index++)
+                    {
+                        let lang=this.$systemFunctions.language_available[index];
+                        item['name_'+lang]=name[lang]?name[lang]:'';
+                    }
+
+                    if(this.$systemFunctions.language!=this.$systemFunctions.language_available[0]){
+                        item['name_0']=item['name_'+this.$systemFunctions.language_available[0]];                        
+                    }
+                    
                     for(var level=1;level<=this.modules_tasks.max_level;level++)
                     {
                         if(level==this.modules_tasks.tree[i].level)
                         {
-                            item['name_'+level]=this.modules_tasks.tree[i].module_task['name_'+this.$systemFunctions.language];          
+                            item['name_'+level]=item['name_'+this.$systemFunctions.language];          
                         }
                         else
                         { 
@@ -251,9 +262,17 @@ import Details from './Details.vue'
                         this.$systemFunctions.statusDataLoaded = 1;
                         if(res.data.error==''){
                             this.item={};
-                            this.item=res.data.item;                     
+                            this.item=res.data.item; 
+                            let name=JSON.parse(this.item['name']);
+                            delete this.item['name']; 
+                            
+                            for(let index=0;index<this.$systemFunctions.language_available.length;index++)
+                            {
+                                let lang=this.$systemFunctions.language_available[index];
+                                this.item['name_'+lang]=name[lang]?name[lang]:'';
+                            }                   
                         }
-                    }).catch(error => {   
+                    }).catch(error => {                           
                         this.$systemFunctions.statusDataLoaded = 1;
                         if (error.response && error.response.data && error.response.data.error) {
                             this.$systemFunctions.showResponseError(error.response.data);            

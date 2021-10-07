@@ -29,7 +29,7 @@ function initialData() {
         localStorageAuthTokenStr:localStorageAuthTokenStr,
         localStorageLanguageStr:localStorageLanguageStr,
         language: language,
-        language_available:['en','bn'],
+        language_available:['en','bn','in'],
         labels: labels,
         user: {
             authToken: localStorage.getItem(localStorageAuthTokenStr) ? localStorage.getItem(localStorageAuthTokenStr) : '',
