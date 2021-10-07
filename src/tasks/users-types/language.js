@@ -1,19 +1,19 @@
 export var labels={
     label_task:{
-        en:"System Configurations",
-        bn:'সিস্টেম কনফিগারেশন'       
+        en:"User Types",
+        bn:'ব্যবহারকারীর ধরণ'       
     },
     label_new:{
-        en:"New Configuration",
-        bn:'নতুন কনফিগারেশন'       
+        en:"New User Type",
+        bn:'নতুন ব্যবহারকারীর ধরণ'       
     },    
     label_edit:{
-        en:"Edit Configuration",
-        bn:'সম্পাদনা কনফিগারেশন'       
+        en:"Edit User Type",
+        bn:'সম্পাদনা ব্যবহারকারীর ধরণ'       
     },
     label_details:{
-        en:"details of Configuration",
-        bn:'বিস্তারিত কনফিগারেশন'       
+        en:"details of ",
+        bn:'বিস্তারিত ব্যবহারকারীর ধরণ'       
     },    
     label_prefix:{
         en:"prefix",

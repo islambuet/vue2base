@@ -17,6 +17,7 @@
             <ValidationError/>
             <form id="formSaveItem">
               <input type="hidden" name="id" :value="$parent.item.id" />
+              <input type="hidden" name="save_token" :value="$systemFunctions.user.id+'_'+new Date().getTime()" />
               <div class="row mb-2">
                 <div class="col-4">
                     <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_purpose')}}</label>
@@ -79,7 +80,7 @@ export default {
           this.$systemFunctions.statusDataLoaded = 1;
           if(res.data.error==''){
               this.$systemFunctions.showSuccessMessage(this.$systemFunctions.getLabel('msg_success_saved'));
-              this.$parent.itemsLoaded=false;
+              this.$systemFunctions.loadListData=true;
               if(save_and_new){
                 if(this.$route.path=='/'+this.$parent.base_url+'/add'){
                 this.$parent.addItem();
