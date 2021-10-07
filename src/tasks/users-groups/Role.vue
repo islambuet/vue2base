@@ -119,10 +119,13 @@ export default {
             {
                 if(modules_tasks[i].level==1)
                 {
-                    items[modules_tasks[i].module_task.id]={name:modules_tasks[i].module_task.name_en,modules_tasks:[],max_level:1};
+                    console.log();
+                    let name=JSON.parse(modules_tasks[i].module_task.name);
+                    items[modules_tasks[i].module_task.id]={name:name[this.$systemFunctions.getLanguage()]?name[this.$systemFunctions.getLanguage()]:'EMPTY_MENU',modules_tasks:[],max_level:1};
                     for(let j=i;j< modules_tasks.length;j++)
                     {
                         let item={};
+                        console.log(modules_tasks[j].module_task);
                         Object.assign(item,modules_tasks[j].module_task);
                         item.level=modules_tasks[j].level;
                         item.parent_class=modules_tasks[j].parent_class;
@@ -161,7 +164,7 @@ export default {
             .then(res => {
                 this.$systemFunctions.statusDataLoaded = 1;
                 this.$systemFunctions.showSuccessMessage(this.$systemFunctions.getLabel('msg_success_saved'));
-                this.$parent.itemsLoaded=false;
+                this.$systemFunctions.loadListData=true;
             }).catch(error => {                      
                 this.$systemFunctions.statusDataLoaded = 1;
                 if (error.response && error.response.data && error.response.data.error) {

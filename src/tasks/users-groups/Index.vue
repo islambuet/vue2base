@@ -28,12 +28,11 @@ import Role from './Role.vue'
                 itemDefault: {},                
                 item: {},           //single item
                 items: {data:[]},   //from Laravel server with pagination and info
-                itemsFiltered: [],    //for display
-                itemsLoaded:false,
-                modules_tasks:{},
-                 columns:{all:{},hidden:[],sort:{key:'',dir:''}},
+                itemsFiltered: [],    //for display                                
+                columns:{all:{},hidden:[],sort:{key:'',dir:''}},
                 hidden_columns:[],
                 pagination: {current_page: 1,per_page_options: [5,10,20,500,1000],per_page:20,show_all_items:true},
+                modules_tasks:{},
                 module_task_max_action:8,
             }
         },
@@ -44,6 +43,7 @@ import Role from './Role.vue'
             this.$systemFunctions.loadLanguageFiles([
                 {language:this.$systemFunctions.getLanguage(),file:'tasks/'+this.base_url+'/language.js'},
             ]);
+            this.$systemFunctions.loadListData=true;
             this.init();
         },
         watch: {
@@ -167,11 +167,11 @@ import Role from './Role.vue'
             },  
             
             reloadItems(pagination){
-                this.itemsLoaded=false;
+                this.$systemFunctions.loadListData=true;
                 this.getItems(pagination);
             },       
             getItems(pagination){                
-                if(!this.itemsLoaded)
+                if(this.$systemFunctions.loadListData)
                 {
                     this.$systemFunctions.statusDataLoaded=0;
                     this.$axios.get('/'+this.base_url+'/get-items?page='+ pagination.current_page+'&perPage='+ pagination.per_page)
@@ -181,7 +181,7 @@ import Role from './Role.vue'
                             this.items=res.data.items;
                             this.getFilteredItems();                                                
                         }
-                        this.itemsLoaded=true;
+                        this.$systemFunctions.loadListData=false;
                     }).catch(error => {                      
                         this.$systemFunctions.statusDataLoaded = 1;
                         if (error.response && error.response.data && error.response.data.error) {
