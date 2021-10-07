@@ -17,9 +17,10 @@
             <ValidationError/>
             <form id="formSaveItem">
               <input type="hidden" name="id" :value="$parent.item.id" />
+              <input type="hidden" name="save_token" :value="$systemFunctions.user.id+'_'+new Date().getTime()" />
               <div class="row mb-2">
                 <div class="col-4">
-                    <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_name')}}</label>
+                    <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_name')}} <span class="text-danger">*</span></label>
                 </div>
                 <div class="col-lg-4 col-8">
                     <input type="text" class="form-control" name="item[name]" v-model="$parent.item.name" required>
@@ -27,7 +28,7 @@
               </div>          
               <div class="row mb-2">
                 <div class="col-4">
-                    <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_prefix')}}</label>
+                    <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_prefix')}} <span class="text-danger">*</span></label>
                 </div>
                 <div class="col-lg-4 col-8">
                   <input type="text" class="form-control" name="item[prefix]" v-model="$parent.item.prefix" required>                    
@@ -35,15 +36,15 @@
               </div>  
               <div class="row mb-2">
                 <div class="col-4">
-                    <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_ordering')}}</label>
+                    <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_ordering')}} <span class="text-danger">*</span></label>
                 </div>
                 <div class="col-lg-4 col-8">
-                  <input type="text" class="form-control" name="item[ordering]" v-model="$parent.item.ordering" required>     
+                  <input type="text" class="form-control integer_positive" name="item[ordering]" v-model="$parent.item.ordering" required>     
                 </div>
               </div>                       
               <div class="row mb-2">
                 <div class="col-4">
-                    <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_status')}}</label>
+                    <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_status')}} <span class="text-danger">*</span></label>
                 </div>
                 <div class="col-lg-4 col-8">
                   <select class="form-control" name="item[status]" v-model="$parent.item.status" required>                                    
@@ -79,7 +80,7 @@ export default {
           this.$systemFunctions.statusDataLoaded = 1;
           if(res.data.error==''){
               this.$systemFunctions.showSuccessMessage(this.$systemFunctions.getLabel('msg_success_saved'));
-              this.$parent.itemsLoaded=false;
+              this.$systemFunctions.loadListData=true;
               if(save_and_new){
                 if(this.$route.path=='/'+this.$parent.base_url+'/add'){
                 this.$parent.addItem();
