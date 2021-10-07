@@ -24,13 +24,9 @@
             </a>
             <div class="dropdown-menu dropdown-menu-right">
                 <!-- item-->
-                <a href="#" class="dropdown-item" id="system_language_english" v-on:click="$systemFunctions.changeLanguage('en')">
-                    <span>English</span>
-                </a>
-                <!-- item-->
-                <a href="" class="dropdown-item" id="system_language_bangla" v-on:click="$systemFunctions.changeLanguage('bn')">
-                    <span>বাংলা</span>
-                </a>
+                <a v-for="(language,i) in $systemFunctions.language_available" :key="'language_'+i" href="#" class="dropdown-item" v-on:click="$systemFunctions.changeLanguage(language)">
+                    <span>{{$systemFunctions.getLabel('label_'+language)}}</span>
+                </a>                
             </div>
         </li>
         <!-- Users options -->

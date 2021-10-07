@@ -90,7 +90,24 @@ export var labels={
         en:"To",
         bn:"পর্যন্ত"
     },
-    //filter eed
+    //filter end
+    //language labels
+    label_en:{
+        en:"English",
+        bn:"English",
+        in:"English",
+    },
+    label_bn:{
+        en:"বাংলা",
+        bn:"বাংলা",
+        in:"বাংলা",
+    },
+    label_in:{
+        en:"हिंदी",
+        bn:"हिंदी",
+        in:"हिंदी",
+    },
+    //language labels end
 
 
     //common
