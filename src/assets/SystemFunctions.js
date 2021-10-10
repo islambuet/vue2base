@@ -36,6 +36,7 @@ function initialData() {
             id: 0,
             name: language == 'en' ? 'Guest' : 'অতিথি',
             info:{},
+            profile_picture_url: '',
             tasks: []
         },    
         baseUrl: process.env.BASE_URL,

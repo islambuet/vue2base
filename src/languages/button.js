@@ -72,4 +72,12 @@ export var labels={
          en:'CSV',
          bn:'সিএসভি'      
     },
+    button_upload_image:{
+         en:'Select Image',
+         bn:'ছবি নির্বাচন করুন'      
+    },
+    button_upload_file:{
+         en:'Select File',
+         bn:'ফাইল নির্বাচন করুন'      
+    },
 }
