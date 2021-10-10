@@ -39,9 +39,9 @@
                 <div class="dropdown-item">
                     <h6 class="text-overflow m-0">{{$systemFunctions.getLabel('label_welcome')}} {{$systemFunctions.user.name}}</h6>
                 </div>
-                <!-- item-->                
-                <a href="#" class="system_ajax dropdown-item"><i class="icon-mid bi bi-person-square me-2"></i> Profile Picture</a>
-                <!-- item-->
+                <!-- item-->    
+                <router-link to="/profile" :class="'dropdown-item'"><i class="bi bi-person-square"></i> {{$systemFunctions.getLabel('label_profile')}}</router-link>
+                
                 <a href="#" class="system_ajax dropdown-item"><i class="icon-mid bi bi-file-lock-fill me-2"></i> Change Password</a>                
                 <div class="dropdown-divider"></div>
                 <a href="#" class="system_ajax dropdown-item" v-on:click.prevent="$systemFunctions.logout()"><i class="icon-mid bi bi-power me-2"></i> {{$systemFunctions.getLabel('label_logout')}}</a>

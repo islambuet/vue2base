@@ -132,6 +132,10 @@ export var labels={
         en:"Description",
         bn:"ব্যাখ্যা"
     },
+    label_profile:{
+        en:"Profile",
+        bn:"প্রোফাইল "
+    },
     
     label_logout:{
         en:"Logout",
