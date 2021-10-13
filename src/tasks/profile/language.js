@@ -12,24 +12,12 @@ export var labels={
         bn:'প্রোফাইল ছবি'       
     },
     
-    label_details:{
-        en:"details of Module And task",
-        bn:'বিস্তারিত মডিউল এবং টাস্ক'       
+    label_old_password :{
+        en:"Old Password",
+        bn:'পুরানো পাসওয়ার্ড'       
     },
-    label_module_task_type:{
-        en:"Type",
-        bn:'টাইপ'       
-    },
-    label_url:{
-        en:"Url",
-        bn:'Url'       
-    },
-    label_controller:{
-        en:"Controller",
-        bn:'Controller'       
-    },
-    label_parent:{
-        en:"Parent",
-        bn:'Parent'       
-    },
+    label_new_password :{
+        en:"New Password",
+        bn:'নতুন পাসওয়ার্ড'       
+    },    
 }

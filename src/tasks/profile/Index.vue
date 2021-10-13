@@ -20,7 +20,7 @@
                         <div class="card-header p-1">
                             <a class="btn btn-sm" data-toggle="collapse" href="#label_change_password">{{$systemFunctions.getLabel('label_change_password')}} </a>
                         </div>
-                        <div id="label_change_password" class="collapse">
+                        <div id="label_change_password" class="collapse show">
                             <div v-if="error_section=='change_password'">
                                 <ValidationError/>
                             </div>
@@ -29,11 +29,30 @@
                                 <div class="card-body">
                                     <div class="row mb-2">
                                         <div class="col-4">
-                                            <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_change_password')}}</label>
+                                            <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_old_password')}} <span class="text-danger">*</span></label>
                                         </div>
-                                        <div class="col-8">                                            
-                                        </div>                                                                     
-                                    </div>                                    
+                                        <div class="col-lg-4 col-8">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend eye_password">
+                                            <span class="input-group-text" ><i class="feather icon-eye"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" name="item[password_old]" v-model="password_old" required>
+                                        </div>
+                                        </div>
+                                    </div>      
+                                    <div class="row mb-2">
+                                        <div class="col-4">
+                                            <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_new_password')}} <span class="text-danger">*</span></label>
+                                        </div>
+                                        <div class="col-lg-4 col-8">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend eye_password">
+                                            <span class="input-group-text" ><i class="feather icon-eye"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" name="item[password_new]" v-model="password_new" required>
+                                        </div>
+                                        </div>
+                                    </div>                            
                                     
                                     <div class="row mb-2">
                                         <div class="col-4">                                        
@@ -116,8 +135,11 @@ import ValidationError from '@/components/ValidationError.vue';
                 base_url:'profile',
                 save_token: '',
                 error_section:'',
+                password_old:'',
+                password_new:'',
                 profile_picture:this.$systemFunctions.baseUrl+'theme/images/no_image.jpg',
-                formSaveProfilePicture:'formSaveProfilePicture'            
+                formSaveProfilePicture:'formSaveProfilePicture',            
+                formSaveChangePassword:'formSaveChangePassword',            
             }
         }, 
         created(){    
@@ -171,6 +193,28 @@ import ValidationError from '@/components/ValidationError.vue';
                 this.profile_picture=this.$systemFunctions.user.profile_picture_url?this.$systemFunctions.user.profile_picture_url:this.$systemFunctions.baseUrl+'theme/images/no_image.jpg';
                 let img_tag='<img style="max-width: 100%;max-height:200px" src="'+this.profile_picture+'">';
                 $('#profile_picture_preview_container').html(img_tag);
+            },
+            savePassword(){
+                
+                this.$systemFunctions.statusDataLoaded=0;
+                this.$axios.post('/user/change-password',new FormData(document.getElementById(this.formSaveChangePassword)))
+                .then(res => {
+                    this.$systemFunctions.statusDataLoaded = 1;
+                    if(res.data.error==''){
+                        this.$systemFunctions.showSuccessMessage(this.$systemFunctions.getLabel('msg_success_saved'));
+                        this.password_old='';
+                        this.password_new='';                        
+                    }
+                }).catch(error => {   
+                    this.error_section='change_password';                   
+                    this.$systemFunctions.statusDataLoaded = 1;
+                    if (error.response && error.response.data && error.response.data.error) {
+                        this.$systemFunctions.showResponseError(error.response.data);            
+                    } else {            
+                        this.$systemFunctions.showResponseFailure();
+                    }                              
+                });
+
             },
         }  
     }
