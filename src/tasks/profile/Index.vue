@@ -5,13 +5,12 @@
                 <div>{{$systemFunctions.getLabel('label_welcome')}} {{$systemFunctions.user.name}}</div>            
             </div>
             <div class="card-body">
-                <ValidationError/>
                 <div id="accordion">
                     <div class="card">
                         <div class="card-header p-1">
                             <a class="btn btn-sm" data-toggle="collapse" href="#label_qr_code">{{$systemFunctions.getLabel('label_qr_code')}} </a>
                         </div>
-                        <div id="label_qr_code" class="collapse show">
+                        <div id="label_qr_code" class="collapse">
                             <div class="card-body">
                                 <div id="qr_code_image" class="text-center"></div>
                             </div>
@@ -19,9 +18,45 @@
                     </div>
                     <div class="card">
                         <div class="card-header p-1">
+                            <a class="btn btn-sm" data-toggle="collapse" href="#label_change_password">{{$systemFunctions.getLabel('label_change_password')}} </a>
+                        </div>
+                        <div id="label_change_password" class="collapse">
+                            <div v-if="error_section=='change_password'">
+                                <ValidationError/>
+                            </div>
+                            <form :id="formSaveChangePassword">              
+                                <input type="hidden" name="save_token" :value="save_token" />
+                                <div class="card-body">
+                                    <div class="row mb-2">
+                                        <div class="col-4">
+                                            <label class="font-weight-bold float-right">{{$systemFunctions.getLabel('label_change_password')}}</label>
+                                        </div>
+                                        <div class="col-8">                                            
+                                        </div>                                                                     
+                                    </div>                                    
+                                    
+                                    <div class="row mb-2">
+                                        <div class="col-4">                                        
+                                        </div>
+                                        <div class="col-4">    
+                                            <button type="button" class="mr-2 mb-2 btn btn-sm bg-gradient-primary" @click="savePassword()"><i class="feather icon-save"></i> {{$systemFunctions.getLabel('button_save')}}</button>
+                                            
+                                        </div>
+                                        <div class="col-4">                                        
+                                        </div>                                   
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header p-1">
                             <a class="btn btn-sm" data-toggle="collapse" href="#label_profile_picture">{{$systemFunctions.getLabel('label_profile_picture')}} </a>
                         </div>
-                        <div id="label_profile_picture" class="collapse show">
+                        <div id="label_profile_picture" class="collapse">
+                            <div v-if="error_section=='profile_picture'">
+                                <ValidationError/>
+                            </div>
                             <form :id="formSaveProfilePicture">              
                                 <input type="hidden" name="save_token" :value="save_token" />
                                 <div class="card-body">
@@ -62,6 +97,7 @@
                             </form>
                         </div>
                     </div>
+                    
                 </div>
             </div>
         </div>
@@ -79,6 +115,7 @@ import ValidationError from '@/components/ValidationError.vue';
             return {
                 base_url:'profile',
                 save_token: '',
+                error_section:'',
                 profile_picture:this.$systemFunctions.baseUrl+'theme/images/no_image.jpg',
                 formSaveProfilePicture:'formSaveProfilePicture'            
             }
@@ -115,8 +152,11 @@ import ValidationError from '@/components/ValidationError.vue';
                     if(res.data.error==''){
                         this.$systemFunctions.showSuccessMessage(this.$systemFunctions.getLabel('msg_success_saved'));
                         this.$systemFunctions.user.profile_picture_url=res.data.profile_picture_url;
+                        this.save_token=this.$systemFunctions.user.id+'_'+new Date().getTime();
+
                     }
-                }).catch(error => {                      
+                }).catch(error => {   
+                    this.error_section='profile_picture';                   
                     this.$systemFunctions.statusDataLoaded = 1;
                     if (error.response && error.response.data && error.response.data.error) {
                         this.$systemFunctions.showResponseError(error.response.data);            
@@ -132,35 +172,6 @@ import ValidationError from '@/components/ValidationError.vue';
                 let img_tag='<img style="max-width: 100%;max-height:200px" src="'+this.profile_picture+'">';
                 $('#profile_picture_preview_container').html(img_tag);
             },
-            save:function(save_and_new)
-            { 
-            this.$systemFunctions.statusDataLoaded=0;
-            this.$axios.post('/'+this.$parent.base_url+'/save-item',new FormData(document.getElementById('formSaveItem')))
-            .then(res => {
-                this.$systemFunctions.statusDataLoaded = 1;
-                if(res.data.error==''){
-                    this.$systemFunctions.showSuccessMessage(this.$systemFunctions.getLabel('msg_success_saved'));
-                    this.$systemFunctions.loadListData=true;
-                    if(save_and_new){
-                        if(this.$route.path=='/'+this.$parent.base_url+'/add'){
-                        this.$parent.addItem();
-                        }
-                        else{
-                        this.$router.push('/'+this.$parent.base_url+'/add');
-                        }
-                    }else{
-                        this.$router.push('/'+this.$parent.base_url);
-                    }
-                }
-            }).catch(error => {                      
-                this.$systemFunctions.statusDataLoaded = 1;
-                if (error.response && error.response.data && error.response.data.error) {
-                    this.$systemFunctions.showResponseError(error.response.data);            
-                } else {            
-                    this.$systemFunctions.showResponseFailure();
-                }                              
-            });
-            }
         }  
     }
 </script>
